@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include "InputManager.h"
+#include "Player.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
