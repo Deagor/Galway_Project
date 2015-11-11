@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include <SDL_mixer.h>
+
 #include "InputManager.h"
 #include "Render.h"
 
