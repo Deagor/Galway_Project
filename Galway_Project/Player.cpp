@@ -1,43 +1,89 @@
 #include "stdafx.h"
 #include "Player.h"
 
-//constructor
-Player::Player()
-{
+Player::Player(b2World* world, float x, float y) : m_world(world) {
+	reset = false;
+	grounded = true;
+	resetPos = b2Vec2(10, 350);
+	createBox2dBody(x, y);
+	LoadAssets(x, y);
+}
+
+void Player::createBox2dBody(float x, float y) {
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(x / 30, y / 30);
+	bodyDef.userData = "Player";
+	bodyDef.gravityScale = 1;
+	body = m_world->CreateBody(&bodyDef);
+	dynamicBox.SetAsBox((32 / 2.0f) / 30, (36 / 2.0f) / 30);
+	fixtureDef.shape = &dynamicBox;
+
+	fixtureDef.density = 1.0f;
+	fixtureDef.friction = 0.3f;
+	fixtureDef.userData = this;
+	fixtureDef.restitution = b2MixRestitution(0, 0);
+
+	body->CreateFixture(&fixtureDef);
+	body->SetFixedRotation(true);
 
 }
 
-//destructor
-Player::~Player()
-{
-
+void Player::LoadAssets(float x, float y) {
+	std::string basepath(SDL_GetBasePath());
+	std::string imagePath = basepath + "player.bmp";
+	sprite = SDL_LoadBMP(imagePath.c_str());
+	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
 }
 
-//update the player
-void Player::Update()
-{
+void Player::MovePlayer() {
 
-}
+	vel = body->GetLinearVelocity();
+	desiredVelX = 0;
+	desiredVelY = 0;
 
-//move the player horizontally
-void Player::Move()
-{
-
-}
-
-//move the player vertically upwards
-void Player::Jump()
-{
-	if (canJump == true)//so if the player is able to jump(i.e. not already in the air)
+	//moving left and right
+	if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 	{
-		float impulse = -180;
-		body->ApplyLinearImpulse(b2Vec2(0, impulse), body->GetWorldCenter(), true);
-		canJump = false;
+		body->SetTransform(b2Vec2(body->GetPosition().x - 0.3, body->GetPosition().y), 0);
 	}
+
+	if (InputManager::GetInstance()->IsKeyHeld(SDLK_d))
+	{
+		body->SetTransform(b2Vec2(body->GetPosition().x + 0.3, body->GetPosition().y), 0);
+	}
+
+	if (InputManager::GetInstance()->IsKeyDown(SDLK_w))
+	{
+		if (grounded)
+		{
+			desiredVelY = -100;
+			grounded = false;
+		}
+	}
+
+	velChangeX = desiredVelX - vel.x;
+
+	impulseX = body->GetMass() * desiredVelX;
+	impulseY = body->GetMass() * desiredVelY;
+
+	body->ApplyLinearImpulse(b2Vec2(impulseX, impulseY), body->GetWorldCenter(), true);
 }
 
-//Reset the player to their starting position
-void Player::Reset()
-{
+void Player::Update(b2World* world) {
+	if (reset) {
+		body->SetTransform(resetPos, 0);
+		reset = false;
+	}
 
+	spriteRect->x = body->GetPosition().x * 30;
+	spriteRect->y = body->GetPosition().y * 30;
+}
+
+void Player::Reset() {
+	reset = true;
+}
+
+void Player::Ground()
+{
+	grounded = true;
 }
