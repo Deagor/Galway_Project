@@ -7,9 +7,19 @@
 
 #include "targetver.h"
 
+#include "SDL.h"
+
+#include "Build\Box2D.h"
+
 #include <stdio.h>
 #include <tchar.h>
+#include <vector>
+#include <list>
+#include <string>
+#include <algorithm>
+#include <iostream>
 
-
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 // TODO: reference additional headers your program requires here
