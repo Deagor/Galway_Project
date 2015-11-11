@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
 	SDL_Event e;
 	bool quit = false;
 
+	Render::GetInstance();
+
 	while (!quit)
 	{
 		// Update loop
