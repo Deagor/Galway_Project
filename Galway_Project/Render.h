@@ -11,11 +11,20 @@
 class Render {
 private:
 	SDL_Renderer *ren;
+	SDL_Window* win;
+
 	std::vector<SDL_Texture*> textures;
 	std::vector<SDL_Rect> dstRects;
 	std::vector<SDL_Rect> srcRects;
-public:
-	Render(SDL_Window *win) {
+
+	const int SCREEN_WIDTH = 1280;
+	const int SCREEN_HEIGHT = 720;
+
+	Render* instance = NULL;
+
+	Render() {
+		win = SDL_CreateWindow("Group A", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
 		dstRects.reserve(100);
 		srcRects.reserve(100);
 		//creating a renderer that is linked to the render class 
@@ -26,6 +35,25 @@ public:
 		}
 		//set background color
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+	}
+	
+	~Render()
+	{
+		delete win;
+	}
+
+public:
+
+	Render* GetInstance()
+	{
+		if (instance != NULL)
+		{
+			return instance;
+		}
+		else
+		{
+			instance = new Render();
+		}
 	}
 
 	//updating the renderer and drawing what is within it
