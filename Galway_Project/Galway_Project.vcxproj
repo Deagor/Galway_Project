@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Galway_Project.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

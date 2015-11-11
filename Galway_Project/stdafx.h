@@ -22,6 +22,7 @@
 #include <SDL_mixer.h>
 
 #include "InputManager.h"
+#include "Player.h"
 #include "Render.h"
 
 #include <SDL.h>
