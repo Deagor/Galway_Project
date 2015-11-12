@@ -6,6 +6,7 @@ LevelManager::LevelManager(b2World* world)
 {
 	theWorld = world;
 
+	//**Level 1**
 	Platform* platform = new Platform(theWorld, 40, 580, 150, 20, "Platform");
 	Platform* platform2 = new Platform(theWorld, 1090, 580, 150, 20, "Platform");
 	Platform* platform3 = new Platform(theWorld, 300, 500, 200, 20, "Platform");
@@ -22,7 +23,71 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform9nd3Q = new Platform(theWorld, 520, 190, 150, 20, "Platform");
 	Platform* platform10 = new Platform(theWorld, 1090, 190, 150, 20, "Platform");
 	Platform* platform11 = new Platform(theWorld, 560, 400, 100, 20,"Platform");
-	
+
+
+	//**Level 2**
+	Platform* platform12 = new Platform(theWorld, 40, 580- 720, 150, 20, "Platform");
+	Platform* platform13 = new Platform(theWorld, 1090, 580- 720, 150, 20, "Platform");
+	Platform* platform14 = new Platform(theWorld, 300, 500 - 720, 200, 20, "Platform");
+	Platform* platform15 = new Platform(theWorld, 750, 500 - 720, 200, 20, "Platform");
+
+
+	Platform* platform16 = new Platform(theWorld, 520, 400 - 720, 200, 20, "Platform");
+
+	Platform* platform17 = new Platform(theWorld, 40, 200 - 720, 150, 20, "Platform");
+	Platform* platform18 = new Platform(theWorld, 1090, 200 - 720, 150, 20, "Platform");
+	Platform* platform19 = new Platform(theWorld, 300, 300 - 720, 200, 20, "Platform");
+	Platform* platform20 = new Platform(theWorld, 750, 300 - 720, 200, 20, "Platform");
+	Platform* platform21= new Platform(theWorld, 515, 140 - 720, 245, 20, "Platform");
+
+	//**Level 3**
+	Platform* platform22 = new Platform(theWorld, 520, 580-1440, 80, 20, "Platform");
+	Platform* platform23 = new Platform(theWorld, 300, 500 - 1440, 150, 20, "Platform");
+	Platform* platform24 = new Platform(theWorld, 700, 500 - 1440, 150, 20, "Platform");
+	Platform* platform25 = new Platform(theWorld, 150, 400 - 1440, 100, 20, "Platform");
+	Platform* platform26 = new Platform(theWorld, 850, 400 - 1440, 250, 20, "Platform");
+
+	Platform* platform27 = new Platform(theWorld, 300, 120 - 1440, 600, 20, "Platform");
+	Platform* platform28 = new Platform(theWorld, 520, 340 - 1440, 150, 20, "Platform");
+	Platform* platform29 = new Platform(theWorld, 750, 240 - 1440, 80, 20, "Platform");
+	Platform* platform30 = new Platform(theWorld, 950, 180 - 1440, 150, 20, "Platform");
+
+	Platform* platform31= new Platform(theWorld, 240, 240 - 1440, 245, 20, "Platform");
+	Platform* platform32 = new Platform(theWorld, 100, 180 - 1440, 100, 20, "Platform");
+
+	platforms.push_back(platform);
+	platforms.push_back(platform2);
+	platforms.push_back(platform3);
+	platforms.push_back(platform4);
+	platforms.push_back(platform5);
+	platforms.push_back(platform6);
+	platforms.push_back(platform7);
+	platforms.push_back(platform8);
+	platforms.push_back(platform9);
+	platforms.push_back(platform9nd3Q);
+	platforms.push_back(platform10);
+	platforms.push_back(platform11);
+	platforms.push_back(platform12);
+	platforms.push_back(platform13);
+	platforms.push_back(platform14);
+	platforms.push_back(platform15);
+	platforms.push_back(platform16);
+	platforms.push_back(platform17);
+	platforms.push_back(platform18);
+	platforms.push_back(platform19);
+	platforms.push_back(platform20);
+	platforms.push_back(platform21);
+	platforms.push_back(platform22);
+	platforms.push_back(platform23);
+	platforms.push_back(platform24);
+	platforms.push_back(platform25);
+	platforms.push_back(platform26);
+	platforms.push_back(platform27);
+	platforms.push_back(platform28);
+	platforms.push_back(platform29);
+	platforms.push_back(platform30);
+	platforms.push_back(platform31);
+	platforms.push_back(platform32);
 
 	Platform* boundryGround = new Platform(theWorld, 0, 680, 1280, 40, "Platform");
 	Platform* boundry1 = new Platform(theWorld, 0, 0, 1280, 40, "Boundary");
