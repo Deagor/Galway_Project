@@ -1,6 +1,13 @@
 #include "Platform.h" 
 #include "stdafx.h"
 
+enum _entityCategory {
+	BOUNDARY = 0x0001,
+	PLATFORM = 0x0002,
+	BULLET = 0x0004,
+	PLAYER = 0x0008
+};
+
 Platform::Platform(b2World* world, float x, float y, float w, float h, std::string name) : mWorld(world), mSize(w, h)
 {
 	LoadAssets(x, y, w, h);
@@ -32,12 +39,13 @@ void Platform::createBox2dBody(float x, float y, float w, float h, std::string n
 
 	mFixtureDef.shape = &mShape;
 	
-	mFixtureDef.userData = this; 
+	mFixtureDef.userData = this;
+
+	mFixtureDef.filter.categoryBits = PLATFORM;
+	mFixtureDef.filter.maskBits = PLAYER | BULLET;
 
 	mFixtureDef.density = 1;
 	mBody->CreateFixture(&mFixtureDef);
-
-
 }
 
 void Platform::LoadAssets(float x, float y, float w, float h)

@@ -24,6 +24,7 @@ public:
 	void Update(b2World* world);
 	void Shoot();
 	void UpdateBullet();
+	void PickupBullet();
 	void Reset();
 	void Ground();
 

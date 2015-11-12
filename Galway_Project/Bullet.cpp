@@ -1,11 +1,19 @@
 #include "stdafx.h"
 #include "Bullet.h"
 
+enum _entityCategory {
+	BOUNDARY = 0x0001,
+	PLATFORM = 0x0002,
+	BULLET = 0x0004,
+	PLAYER = 0x0008
+};
+
 Bullet::Bullet(b2World* world, float x, float y, bool player) : m_world(world), bulletForPlayer1(player)
 {
+	alive = false;
 	reset = false;
 	createBox2dBody(x, y);
-	resetPos = b2Vec2(-500, 0);
+	resetPos = b2Vec2(-5000, 0);
 	LoadAssets(x, y);
 	currentDirection = NOTMOVING;
 
@@ -34,6 +42,16 @@ void Bullet::createBox2dBody(float x, float y)
 	fixtureDef.friction = 0.3f;
 	fixtureDef.userData = this;
 	fixtureDef.restitution = b2MixRestitution(0, 0);
+
+	if (bulletForPlayer1) {
+		fixtureDef.filter.categoryBits = BULLET;
+		fixtureDef.filter.maskBits = PLAYER | PLATFORM;
+	}
+	else
+	{
+		fixtureDef.filter.categoryBits = BULLET;
+		fixtureDef.filter.maskBits = PLAYER | PLATFORM;
+	}
 
 	body->CreateFixture(&fixtureDef);
 	body->SetFixedRotation(true);
@@ -86,7 +104,8 @@ void Bullet::Update()
 	if (reset) {
 		body->SetTransform(resetPos, 0);
 		reset = false;
-		bodyDef.type = b2_kinematicBody;
+		alive = false;
+		bodyDef.type = b2_dynamicBody;
 		currentDirection = NOTMOVING;
 		body->SetLinearVelocity(b2Vec2(0, 0));
 	}
@@ -101,6 +120,7 @@ void Bullet::HitWall()
 	body->SetLinearVelocity(b2Vec2(0, 0)); 
 	body->SetGravityScale(1);
 	currentDirection = NOTMOVING;
+	alive = false;
 }
 
 void Bullet::Reset()
@@ -120,5 +140,12 @@ void Bullet::setPosition(float x, float y)
 }
 
 void Bullet::setDirection(int direction) {
+	body->SetLinearVelocity(b2Vec2(0, 0));
+	body->SetGravityScale(0);
 	currentDirection = direction;
+	alive = true;
+}
+
+bool Bullet::getAlive() {
+	return alive;
 }
