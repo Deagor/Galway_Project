@@ -8,6 +8,7 @@
 #include <Build\Box2D.h>
 #include "Render.h" 
 #include <tuple>
+#include "Bullet.h"
 
 using std::tuple;
 using std::make_tuple;
@@ -22,6 +23,7 @@ public:
 	void MovePlayer();
 	void Update(b2World* world);
 	void Shoot();
+	void UpdateBullet();
 	void Reset();
 	void Ground();
 
@@ -51,7 +53,7 @@ private:
 	float velChangeY;
 	float impulseX;
 	float impulseY;
-
+	bool hasBullet;
 	bool grounded;
 
 };
