@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
 {
 	b2Vec2 Gravity(0.f, 9.8f);
 	b2World world(Gravity);
-
+	ContactListener contact = ContactListener();
+	world.SetContactListener(&contact);
 	CreateGround(world, 0, 600);
 
 	Uint32 lastFrameTime = 0;
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
 	SDL_Event e;
 	bool quit = false;
 
-	Platform platform = Platform(&world, 0, 500, 100, 10, "Platform");
+	Platform platform = Platform(&world, 0, 500, 1000, 100, "Platform");
 
 	Player player1(&world, 100, 100,true);
 	Player player2(&world, 300, 100, false);

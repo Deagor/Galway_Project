@@ -4,6 +4,7 @@
 Player::Player(b2World* world, float x, float y,bool isPlayer1) : m_world(world) {
 	reset = false;
 	grounded = true;
+	player1 = isPlayer1;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
 	createBox2dBody(x, y,isPlayer1);
@@ -13,8 +14,8 @@ Player::Player(b2World* world, float x, float y,bool isPlayer1) : m_world(world)
 void Player::createBox2dBody(float x, float y,bool isPlayer1) {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x / 30, y / 30);
-	if (isPlayer1) { bodyDef.userData = "Player1"; }
-	else { bodyDef.userData = "Player2"; }
+	if (isPlayer1) { bodyDef.userData = "Player"; }
+	else { bodyDef.userData = "Player"; }
 	bodyDef.gravityScale = 1;
 	body = m_world->CreateBody(&bodyDef);
 	dynamicBox.SetAsBox((32 / 2.0f) / 30, (32 / 2.0f) / 30);
@@ -44,7 +45,7 @@ void Player::MovePlayer() {
 	desiredVelY = 0;
 
 	//moving left and right
-	if (body->GetUserData() == "Player1")
+	if (player1)
 	{
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
@@ -60,12 +61,12 @@ void Player::MovePlayer() {
 		{
 			if (grounded)
 			{
-				desiredVelY = -100;
+				desiredVelY = -10;
 				grounded = false;
 			}
 		}
 	}
-	else if (body->GetUserData() == "Player2")
+	else if (!player1)
 	{
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_LEFT)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
@@ -81,7 +82,7 @@ void Player::MovePlayer() {
 		{
 			if (grounded)
 			{
-				desiredVelY = -100;
+				desiredVelY = -10;
 				grounded = false;
 			}
 		}

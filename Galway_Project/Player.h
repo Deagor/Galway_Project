@@ -36,6 +36,7 @@ private:
 	b2FixtureDef fixtureDef;
 	b2Vec2 vel;
 	float speed;
+	bool player1;
 
 	tuple<bool, bool, bool> playerKeys;
 	enum playerActions { LEFT, RIGHT, UP };
