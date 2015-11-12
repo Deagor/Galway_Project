@@ -4,6 +4,7 @@
 class Bullet
 {
 private:
+	bool reset;
 	b2Vec2 resetPos;
 	//move this to move your sprite (To bodydef position)
 	SDL_Rect* spriteRect;
@@ -32,7 +33,7 @@ private:
 
 	bool bulletForPlayer1;
 public:
-	Bullet(b2World*, float, float, bool, int);
+	Bullet(b2World*, float, float, bool);
 
 	//destructor(destroy the body!)
 	~Bullet();
@@ -53,6 +54,9 @@ public:
 	void HitWall();
 
 	void Reset();
+
+	//0=Left, 1=Right, 2=Not moving
+	void setCurrentDirection(int dir) { currentDirection = dir; }
 };
 
 #endif

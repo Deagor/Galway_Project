@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "Bullet.h"
 
-Bullet::Bullet(b2World* world, float x, float y, bool player, int curDir) : m_world(world), bulletForPlayer1(player), currentDirection(curDir)
+Bullet::Bullet(b2World* world, float x, float y, bool player) : m_world(world), bulletForPlayer1(player)
 {
+	reset = false;
 	createBox2dBody(x, y);
+	resetPos = b2Vec2(-500, 0);
 	LoadAssets(x, y);
+	currentDirection = NOTMOVING;
 }
 
 //destructor(destroy the body!)
@@ -22,7 +25,7 @@ void Bullet::createBox2dBody(float x, float y)
 		bodyDef.userData = "Bullet1";
 	else bodyDef.userData = "Bullet2";
 	body = m_world->CreateBody(&bodyDef);
-	dynamicBox.SetAsBox((32 / 2.0f) / 30, (36 / 2.0f) / 30);
+	dynamicBox.SetAsBox((7 / 2.0f) / 30, (7 / 2.0f) / 30);
 	fixtureDef.shape = &dynamicBox;
 
 	fixtureDef.density = 1.0f;
@@ -77,6 +80,14 @@ void Bullet::Move()
 //update the sprite rectangle position
 void Bullet::Update()
 {
+	if (reset) {
+		body->SetTransform(resetPos, 0);
+		reset = false;
+		bodyDef.type = b2_kinematicBody;
+		currentDirection = NOTMOVING;
+		body->SetLinearVelocity(b2Vec2(0, 0));
+	}
+
 	spriteRect->x = body->GetPosition().x * 30;
 	spriteRect->y = body->GetPosition().y * 30;
 }
@@ -86,4 +97,9 @@ void Bullet::HitWall()
 {
 	body->SetLinearVelocity(b2Vec2(0, 0));
 	bodyDef.type = b2_dynamicBody;
+}
+
+void Bullet::Reset()
+{
+	reset = true;
 }
