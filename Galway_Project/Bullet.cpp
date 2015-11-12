@@ -110,3 +110,9 @@ bool Bullet::isBullet1()
 {
 	return bullet1;
 }
+
+//set the bodies position to be the players position
+void Bullet::setPosition(float x, float y)
+{
+	body->SetTransform(b2Vec2(x,y), 0);
+}
