@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 		}
 		
 		Render::GetInstance()->Update();
-		InputManager::GetInstance()->UpdateKeyboardState();
+		
 		//move the simulation forward
 		float32 timeStep = 1.0f / 60.0f;
 		int32 velocityIterations = 6;
@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
 			}
 		}//End Poll Events
 
+		InputManager::GetInstance()->UpdateKeyboardState();
 	}//End Game loop
 	SDL_Quit();
     return 0;
