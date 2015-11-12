@@ -6,6 +6,7 @@
 
 #include "Player.h" 
 #include "Platform.h" 
+#include "Bullet.h"
 
 class ContactListener : public b2ContactListener {
 private:
@@ -81,6 +82,21 @@ public:
 					static_cast<Player*>(bodyUserData1)->Ground();
 
 				static_cast<Platform*>(bodyUserData2)->ToggleMove();
+			}
+		}
+
+		if (fixAType == "Bullet" && fixBType == "Boundary"
+			|| fixAType == "Boundary" && fixBType == "Bullet") {
+			if (fixAType == "Bullet") {
+				void* bodyUserData1 = contact->GetFixtureA()->GetUserData();
+				void* bodyUserData2 = contact->GetFixtureB()->GetUserData(); 				 
+				static_cast<Bullet*>(bodyUserData1)->HitWall();
+			}
+			else if (fixBType == "Bullet") {
+				void* bodyUserData1 = contact->GetFixtureB()->GetUserData();
+				void* bodyUserData2 = contact->GetFixtureA()->GetUserData();  
+				static_cast<Bullet*>(bodyUserData1)->HitWall();
+					 
 			}
 		}
 	}

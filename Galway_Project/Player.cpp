@@ -127,9 +127,18 @@ void Player::Update(b2World* world) {
 
 void Player::Shoot() { 
 	if (hasBullet) {
- 		bullet->setPosition(spriteRect->x, spriteRect->y);
-		bullet->setDirection(direction);
-		hasBullet = false;
+		if (direction == 0)
+		{
+			bullet->setPosition((spriteRect->x + 11) / 30, (spriteRect->y + 32) / 30);
+			bullet->setDirection(direction);
+			hasBullet = false;
+		}
+		if (direction == 1)
+		{
+			bullet->setPosition((spriteRect->x + 41) / 30, (spriteRect->y + 32) / 30);
+			bullet->setDirection(direction);
+			hasBullet = false;
+		}
 	}
 }
 

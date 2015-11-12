@@ -21,11 +21,11 @@ Bullet::~Bullet()
 //create the box2dBody
 void Bullet::createBox2dBody(float x, float y)
 {
-	bodyDef.type = b2_kinematicBody;
+	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x / 30, y / 30);
 	if(bulletForPlayer1 == true)
-		bodyDef.userData = "Bullet1";
-	else bodyDef.userData = "Bullet2";
+		bodyDef.userData = "Bullet";
+	else bodyDef.userData = "Bullet";
 	body = m_world->CreateBody(&bodyDef);
 	dynamicBox.SetAsBox((7 / 2.0f) / 30, (7 / 2.0f) / 30);
 	fixtureDef.shape = &dynamicBox;
@@ -37,6 +37,7 @@ void Bullet::createBox2dBody(float x, float y)
 
 	body->CreateFixture(&fixtureDef);
 	body->SetFixedRotation(true);
+	body->SetGravityScale(0);
 }
 
 //load the texture
@@ -90,15 +91,16 @@ void Bullet::Update()
 		body->SetLinearVelocity(b2Vec2(0, 0));
 	}
 
-	spriteRect->x = body->GetPosition().x * 30;
-	spriteRect->y = body->GetPosition().y * 30;
+	spriteRect->x = body->GetPosition().x * 30 - 3.5;
+	spriteRect->y = body->GetPosition().y * 30 - 3.5;
 }
 
 //if the bullet hits a wall then set velocity to 0 and change body type so it is affected by gravity
 void Bullet::HitWall()
 {
-	body->SetLinearVelocity(b2Vec2(0, 0));
-	bodyDef.type = b2_dynamicBody;
+	body->SetLinearVelocity(b2Vec2(0, 0)); 
+	body->SetGravityScale(1);
+	currentDirection = NOTMOVING;
 }
 
 void Bullet::Reset()

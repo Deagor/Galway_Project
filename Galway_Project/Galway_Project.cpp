@@ -32,7 +32,12 @@ int main(int argc, char *argv[])
 	SDL_Event e;
 	bool quit = false;
 
-	Platform platform = Platform(&world, 0, 500, 1000, 100, "Platform");
+	Platform platform = Platform(&world, 0, 680, 1280, 40, "Platform");
+	Platform platform2 = Platform(&world, 0, 0, 1280, 40, "Boundary");
+	Platform platform3 = Platform(&world, 0, 0, 40, 720, "Boundary");
+	Platform platform4 = Platform(&world, 1240, 0, 40, 720, "Boundary");
+
+	Platform platform5 = Platform(&world, 200, 640, 40, 40, "Boundary");
 
 	Player player1(&world, 100, 100,true);
 	Player player2(&world, 300, 100, false);
