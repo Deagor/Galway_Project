@@ -28,6 +28,7 @@ public:
 	void Ground();
 
 	bool isPlayer1();
+	void SetGrounded(bool set);
 private:
 	bool reset;
 	b2Vec2 resetPos;

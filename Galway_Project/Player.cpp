@@ -19,7 +19,7 @@ void Player::createBox2dBody(float x, float y,bool isPlayer1) {
 	bodyDef.position.Set(x / 30, y / 30);
 	if (isPlayer1) { bodyDef.userData = "Player"; }
 	else { bodyDef.userData = "Player"; }
-	bodyDef.gravityScale = 1;
+	bodyDef.gravityScale = 3;
 	body = m_world->CreateBody(&bodyDef);
 	dynamicBox.SetAsBox((32 / 2.0f) / 30, (32 / 2.0f) / 30);
 	fixtureDef.shape = &dynamicBox;
@@ -66,7 +66,7 @@ void Player::MovePlayer() {
 		{
 			if (grounded)
 			{
-				desiredVelY = -10;
+				desiredVelY = -15;
 				grounded = false;
 				AudioManager::GetInstance()->PlaySoundEffect(2);
 			}
@@ -96,7 +96,7 @@ void Player::MovePlayer() {
 		{
 			if (grounded)
 			{
-				desiredVelY = -10;
+				desiredVelY = -15;
 				grounded = false;
 				AudioManager::GetInstance()->PlaySoundEffect(2);
 			}
@@ -131,9 +131,18 @@ void Player::Update(b2World* world) {
 
 void Player::Shoot() { 
 	if (hasBullet) {
- 		bullet->setPosition(spriteRect->x, spriteRect->y);
-		bullet->setDirection(direction);
-		hasBullet = false;
+		if (direction == 0)
+		{
+			bullet->setPosition((spriteRect->x + 11) / 30, (spriteRect->y + 32) / 30);
+			bullet->setDirection(direction);
+			hasBullet = false;
+		}
+		if (direction == 1)
+		{
+			bullet->setPosition((spriteRect->x + 41) / 30, (spriteRect->y + 32) / 30);
+			bullet->setDirection(direction);
+			hasBullet = false;
+		}
 	}
 }
 
@@ -155,4 +164,9 @@ void Player::Ground()
 bool Player::isPlayer1()
 {
 	return player1;
+}
+
+void Player::SetGrounded(bool set)
+{
+	grounded = set;
 }

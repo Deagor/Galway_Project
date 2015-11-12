@@ -20,7 +20,7 @@
 #include <iostream>
 
 #include <SDL_mixer.h>
-#include "LevelManager.h"
+
 #include "InputManager.h"
 #include "Render.h"
 #include "Player.h"
@@ -28,7 +28,7 @@
 #include "Bullet.h"
 #include "AudioManager.h"
 #include "ContactListener.h"
-
+#include "LevelManager.h"
 
 
 #include <SDL.h>
