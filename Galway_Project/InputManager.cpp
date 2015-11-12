@@ -88,7 +88,7 @@ bool InputManager::IsKeyHeld(SDL_Keycode key)
 bool InputManager::IsKeyUp(SDL_Keycode key)
 {
 	auto iter = std::find(upKeys.begin(), upKeys.end(), key);
-
+	
 	if (iter != upKeys.end())
 	{
 		return true;

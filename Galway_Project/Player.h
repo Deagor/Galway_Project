@@ -16,8 +16,8 @@ using std::get;
 class Player {
 public:
 	Player() {};
-	Player(b2World*, float, float);
-	void createBox2dBody(float, float);
+	Player(b2World*, float, float,bool);
+	void createBox2dBody(float, float,bool);
 	void LoadAssets(float, float);
 	void MovePlayer();
 	void Update(b2World* world);
