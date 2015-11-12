@@ -1,19 +1,20 @@
 #include "stdafx.h"
 #include "Player.h"
 
-Player::Player(b2World* world, float x, float y) : m_world(world) {
+Player::Player(b2World* world, float x, float y,bool isPlayer1) : m_world(world) {
 	reset = false;
 	grounded = true;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
-	createBox2dBody(x, y);
+	createBox2dBody(x, y,isPlayer1);
 	LoadAssets(x, y);
 }
 
-void Player::createBox2dBody(float x, float y) {
+void Player::createBox2dBody(float x, float y,bool isPlayer1) {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x / 30, y / 30);
-	bodyDef.userData = "Player";
+	if (isPlayer1) { bodyDef.userData = "Player1"; }
+	else { bodyDef.userData = "Player2"; }
 	bodyDef.gravityScale = 1;
 	body = m_world->CreateBody(&bodyDef);
 	dynamicBox.SetAsBox((32 / 2.0f) / 30, (32 / 2.0f) / 30);
@@ -43,22 +44,46 @@ void Player::MovePlayer() {
 	desiredVelY = 0;
 
 	//moving left and right
-	if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
+	if (body->GetUserData() == "Player1")
 	{
-		body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
-	}
-
-	if (InputManager::GetInstance()->IsKeyHeld(SDLK_d))
-	{
-		body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
-	}
-
-	if (InputManager::GetInstance()->IsKeyDown(SDLK_w))
-	{
-		if (grounded)
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
-			desiredVelY = -100;
-			grounded = false;
+			body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
+		}
+
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_d))
+		{
+			body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
+		}
+
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_w))
+		{
+			if (grounded)
+			{
+				desiredVelY = -100;
+				grounded = false;
+			}
+		}
+	}
+	else if (body->GetUserData() == "Player2")
+	{
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_LEFT)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
+		{
+			body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
+		}
+
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_RIGHT))
+		{
+			body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
+		}
+
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_UP))
+		{
+			if (grounded)
+			{
+				desiredVelY = -100;
+				grounded = false;
+			}
 		}
 	}
 

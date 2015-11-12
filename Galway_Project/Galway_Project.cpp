@@ -32,8 +32,10 @@ int main(int argc, char *argv[])
 	SDL_Event e;
 	bool quit = false;
 
-	Player player = Player(&world, 100, 100);
 	Platform platform = Platform(&world, 0, 500, 100, 10, "Platform");
+
+	Player player1(&world, 100, 100,true);
+	Player player2(&world, 300, 100, false);
 
 	while (!quit)
 	{
@@ -54,8 +56,11 @@ int main(int argc, char *argv[])
 		int32 positionIterations = 2;
 		world.Step(timeStep, velocityIterations, positionIterations);
 
-		player.Update(&world);
-		player.MovePlayer();
+		player1.Update(&world);
+		player1.MovePlayer();
+
+		player2.Update(&world);
+		player2.MovePlayer();
 
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)

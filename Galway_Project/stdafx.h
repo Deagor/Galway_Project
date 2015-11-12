@@ -25,6 +25,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "Platform.h"
+#include "Bullet.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
