@@ -38,7 +38,7 @@ public:
 				}
 				else
 				{
-
+					AudioManager::GetInstance()->PlaySoundEffect(3);
 				}
 			}
 			if (fixAType == "Bullet")
@@ -53,7 +53,7 @@ public:
 				}
 				else
 				{
-
+					AudioManager::GetInstance()->PlaySoundEffect(3);
 				}
 			}
 		}
