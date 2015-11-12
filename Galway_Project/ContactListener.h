@@ -22,6 +22,41 @@ public:
 		void* fixAType = contact->GetFixtureA()->GetBody()->GetUserData();
 		void* fixBType = contact->GetFixtureB()->GetBody()->GetUserData();
 
+		if (fixAType == "Player" && fixBType == "Bullet"
+			|| fixAType == "Bullet" && fixBType == "Player")
+		{
+			if (fixAType == "Player")
+			{
+				void* bodyUserData1 = contact->GetFixtureA()->GetUserData();
+				void* bodyUserData2 = contact->GetFixtureB()->GetUserData();
+
+				if (static_cast<Player*>(bodyUserData1)->isPlayer1() && static_cast<Bullet*>(bodyUserData2)->isBullet1()
+					|| static_cast<Player*>(bodyUserData1)->isPlayer1() == false && static_cast<Bullet*>(bodyUserData2)->isBullet1() == false)
+				{
+					contact->SetEnabled(false);
+				}
+				else
+				{
+
+				}
+			}
+			if (fixAType == "Bullet")
+			{
+				void* bodyUserData1 = contact->GetFixtureB()->GetUserData();
+				void* bodyUserData2 = contact->GetFixtureA()->GetUserData();
+
+				if (static_cast<Player*>(bodyUserData1)->isPlayer1() && static_cast<Bullet*>(bodyUserData2)->isBullet1()
+					|| static_cast<Player*>(bodyUserData1)->isPlayer1() == false && static_cast<Bullet*>(bodyUserData2)->isBullet1() == false)
+				{
+					contact->SetEnabled(false);
+				}
+				else
+				{
+
+				}
+			}
+		}
+
 		if (fixAType == "Player" && fixBType == "Platform"
 			|| fixAType == "Platform" && fixBType == "Player") {
 			if (fixAType == "Player") {

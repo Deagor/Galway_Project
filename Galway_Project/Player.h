@@ -8,6 +8,7 @@
 #include <Build\Box2D.h>
 #include "Render.h" 
 #include <tuple>
+#include "Bullet.h"
 
 using std::tuple;
 using std::make_tuple;
@@ -21,8 +22,12 @@ public:
 	void LoadAssets(float, float);
 	void MovePlayer();
 	void Update(b2World* world);
+	void Shoot();
+	void UpdateBullet();
 	void Reset();
 	void Ground();
+
+	bool isPlayer1();
 private:
 	bool reset;
 	b2Vec2 resetPos;
@@ -36,7 +41,9 @@ private:
 	b2FixtureDef fixtureDef;
 	b2Vec2 vel;
 	float speed;
-	bool player1;
+	bool player1; 
+	Bullet* bullet;
+	int direction;
 
 	tuple<bool, bool, bool> playerKeys;
 	enum playerActions { LEFT, RIGHT, UP };
@@ -46,7 +53,7 @@ private:
 	float velChangeY;
 	float impulseX;
 	float impulseY;
-
+	bool hasBullet;
 	bool grounded;
 
 };

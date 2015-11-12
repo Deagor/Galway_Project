@@ -3,12 +3,15 @@
 
 Player::Player(b2World* world, float x, float y,bool isPlayer1) : m_world(world) {
 	reset = false;
-	grounded = true;
+	grounded = false;
+	direction = 1; 
 	player1 = isPlayer1;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
 	createBox2dBody(x, y,isPlayer1);
 	LoadAssets(x, y);
+	bullet = new Bullet(m_world, -100000, 0, player1);
+	hasBullet = true;
 }
 
 void Player::createBox2dBody(float x, float y,bool isPlayer1) {
@@ -49,11 +52,13 @@ void Player::MovePlayer() {
 	{
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
+			direction = 0;
 			body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_d))
 		{
+			direction = 1;
 			body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
 		}
 
@@ -65,16 +70,23 @@ void Player::MovePlayer() {
 				grounded = false;
 			}
 		}
+
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_SPACE) && hasBullet)
+		{ 
+			Shoot();
+		}
 	}
 	else if (!player1)
 	{
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_LEFT)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
+			direction = 0;
 			body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_RIGHT))
 		{
+			direction = 1;
 			body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
 		}
 
@@ -85,6 +97,11 @@ void Player::MovePlayer() {
 				desiredVelY = -10;
 				grounded = false;
 			}
+		}
+
+		if (InputManager::GetInstance()->IsKeyHeld(SDLK_RETURN) && hasBullet)
+		{
+			Shoot();
 		}
 	}
 
@@ -97,6 +114,8 @@ void Player::MovePlayer() {
 }
 
 void Player::Update(b2World* world) {
+	UpdateBullet();
+
 	if (reset) {
 		body->SetTransform(resetPos, 0);
 		reset = false;
@@ -106,6 +125,20 @@ void Player::Update(b2World* world) {
 	spriteRect->y = body->GetPosition().y * 30 - 16;
 }
 
+void Player::Shoot() { 
+	if (hasBullet) {
+ 		bullet->setPosition(spriteRect->x, spriteRect->y);
+		bullet->setDirection(direction);
+		hasBullet = false;
+	}
+}
+
+void Player::UpdateBullet()
+{
+	bullet->Move();
+	bullet->Update();
+}
+
 void Player::Reset() {
 	reset = true;
 }
@@ -113,4 +146,9 @@ void Player::Reset() {
 void Player::Ground()
 {
 	grounded = true;
+}
+
+bool Player::isPlayer1()
+{
+	return player1;
 }
