@@ -109,3 +109,7 @@ void Bullet::setPosition(float x, float y)
 {
 	body->SetTransform(b2Vec2(x,y), 0);
 }
+
+void Bullet::setDirection(int direction) {
+	currentDirection = direction;
+}

@@ -4,11 +4,13 @@
 Player::Player(b2World* world, float x, float y,bool isPlayer1) : m_world(world) {
 	reset = false;
 	grounded = true;
+	direction = 1;
+	bullet = NULL;
 	player1 = isPlayer1;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
 	createBox2dBody(x, y,isPlayer1);
-	LoadAssets(x, y);
+	LoadAssets(x, y); 
 }
 
 void Player::createBox2dBody(float x, float y,bool isPlayer1) {
@@ -49,11 +51,13 @@ void Player::MovePlayer() {
 	{
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
+			direction = 0;
 			body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_d))
 		{
+			direction = 1;
 			body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
 		}
 
@@ -70,11 +74,13 @@ void Player::MovePlayer() {
 	{
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_LEFT)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 		{
+			direction = 0;
 			body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_RIGHT))
 		{
+			direction = 1;
 			body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
 		}
 
@@ -104,6 +110,14 @@ void Player::Update(b2World* world) {
 
 	spriteRect->x = body->GetPosition().x * 30 - 16;
 	spriteRect->y = body->GetPosition().y * 30 - 16;
+}
+
+void Player::Shoot() {
+	if (bullet == NULL) {
+		bullet = new Bullet(m_world, spriteRect->x, spriteRect->y, player1);
+	}
+	bullet->setPosition(spriteRect->x, spriteRect->y);
+	bullet->setDirection(direction);
 }
 
 void Player::Reset() {

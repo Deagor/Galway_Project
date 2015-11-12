@@ -60,6 +60,9 @@ public:
 
 	//set the bodies position to be the players position
 	void setPosition(float x, float y);
+
+	//no comment
+	void setDirection(int);
 };
 
 #endif

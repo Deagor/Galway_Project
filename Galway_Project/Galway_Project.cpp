@@ -24,8 +24,7 @@ int main(int argc, char *argv[])
 	b2Vec2 Gravity(0.f, 9.8f);
 	b2World world(Gravity);
 	ContactListener contact = ContactListener();
-	world.SetContactListener(&contact);
-	CreateGround(world, 0, 600);
+	world.SetContactListener(&contact); 
 
 	Uint32 lastFrameTime = 0;
 	Uint32 frameDelay = 0;

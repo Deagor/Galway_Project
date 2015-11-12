@@ -21,6 +21,7 @@ public:
 	void LoadAssets(float, float);
 	void MovePlayer();
 	void Update(b2World* world);
+	void Shoot();
 	void Reset();
 	void Ground();
 private:
@@ -36,7 +37,9 @@ private:
 	b2FixtureDef fixtureDef;
 	b2Vec2 vel;
 	float speed;
-	bool player1;
+	bool player1; 
+	Bullet* bullet;
+	int direction;
 
 	tuple<bool, bool, bool> playerKeys;
 	enum playerActions { LEFT, RIGHT, UP };
