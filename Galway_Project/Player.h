@@ -23,6 +23,8 @@ public:
 	void Update(b2World* world);
 	void Reset();
 	void Ground();
+
+	bool isPlayer1();
 private:
 	bool reset;
 	b2Vec2 resetPos;

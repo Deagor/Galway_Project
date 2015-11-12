@@ -23,6 +23,8 @@ private:
 	float impulseX;
 	float impulseY;
 
+	bool bullet1;
+
 	enum Directions
 	{
 		LEFT,
@@ -55,6 +57,7 @@ public:
 
 	void Reset();
 
+	bool isBullet1();
 	//0=Left, 1=Right, 2=Not moving
 	void setCurrentDirection(int dir) { currentDirection = dir; }
 };
