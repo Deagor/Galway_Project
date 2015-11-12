@@ -4,6 +4,7 @@
 class Bullet
 {
 private:
+	b2Vec2 resetPos;
 	//move this to move your sprite (To bodydef position)
 	SDL_Rect* spriteRect;
 	SDL_Surface *sprite;
@@ -50,6 +51,8 @@ public:
 
 	//if the bullet hits a wall then set velocity to 0 and change body type so it is affected by gravity
 	void HitWall();
+
+	void Reset();
 };
 
 #endif

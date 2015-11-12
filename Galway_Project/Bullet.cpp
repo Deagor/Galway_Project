@@ -38,7 +38,10 @@ void Bullet::createBox2dBody(float x, float y)
 void Bullet::LoadAssets(float x, float y)
 {
 	std::string basepath(SDL_GetBasePath());
-	std::string imagePath = basepath + "bullet.bmp";
+	std::string imagePath;
+	if (bulletForPlayer1 == true)
+		imagePath = basepath + "../Sprites/player1Bullet.bmp";
+	else imagePath = basepath + "../Sprites/player2Bullet.bmp";
 	sprite = SDL_LoadBMP(imagePath.c_str());
 	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
 }
