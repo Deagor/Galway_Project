@@ -57,6 +57,9 @@ public:
 
 	//0=Left, 1=Right, 2=Not moving
 	void setCurrentDirection(int dir) { currentDirection = dir; }
+
+	//set the bodies position to be the players position
+	void setPosition(float x, float y);
 };
 
 #endif
