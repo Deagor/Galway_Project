@@ -35,6 +35,7 @@ private:
 	b2Body* body;
 	b2FixtureDef fixtureDef;
 	b2Vec2 vel;
+	float speed;
 
 	tuple<bool, bool, bool> playerKeys;
 	enum playerActions { LEFT, RIGHT, UP };

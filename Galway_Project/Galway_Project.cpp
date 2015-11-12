@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 	bool quit = false;
 
 	Player player = Player(&world, 100, 100);
+	Platform platform = Platform(&world, 0, 500, 100, 10, "Platform");
 
 	while (!quit)
 	{

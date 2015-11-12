@@ -4,6 +4,7 @@
 Player::Player(b2World* world, float x, float y) : m_world(world) {
 	reset = false;
 	grounded = true;
+	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
 	createBox2dBody(x, y);
 	LoadAssets(x, y);
@@ -15,7 +16,7 @@ void Player::createBox2dBody(float x, float y) {
 	bodyDef.userData = "Player";
 	bodyDef.gravityScale = 1;
 	body = m_world->CreateBody(&bodyDef);
-	dynamicBox.SetAsBox((32 / 2.0f) / 30, (36 / 2.0f) / 30);
+	dynamicBox.SetAsBox((32 / 2.0f) / 30, (32 / 2.0f) / 30);
 	fixtureDef.shape = &dynamicBox;
 
 	fixtureDef.density = 1.0f;
@@ -30,7 +31,7 @@ void Player::createBox2dBody(float x, float y) {
 
 void Player::LoadAssets(float x, float y) {
 	std::string basepath(SDL_GetBasePath());
-	std::string imagePath = basepath + "player.bmp";
+	std::string imagePath = basepath + "../Sprites/player.bmp";
 	sprite = SDL_LoadBMP(imagePath.c_str());
 	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
 }
@@ -44,12 +45,12 @@ void Player::MovePlayer() {
 	//moving left and right
 	if (InputManager::GetInstance()->IsKeyHeld(SDLK_a)) //tuples have weird syntax, get<index>(tuple) is the same as array[index]
 	{
-		body->SetTransform(b2Vec2(body->GetPosition().x - 0.3, body->GetPosition().y), 0);
+		body->SetTransform(b2Vec2(body->GetPosition().x - speed, body->GetPosition().y), 0);
 	}
 
 	if (InputManager::GetInstance()->IsKeyHeld(SDLK_d))
 	{
-		body->SetTransform(b2Vec2(body->GetPosition().x + 0.3, body->GetPosition().y), 0);
+		body->SetTransform(b2Vec2(body->GetPosition().x + speed, body->GetPosition().y), 0);
 	}
 
 	if (InputManager::GetInstance()->IsKeyDown(SDLK_w))
@@ -75,8 +76,8 @@ void Player::Update(b2World* world) {
 		reset = false;
 	}
 
-	spriteRect->x = body->GetPosition().x * 30;
-	spriteRect->y = body->GetPosition().y * 30;
+	spriteRect->x = body->GetPosition().x * 30 - 16;
+	spriteRect->y = body->GetPosition().y * 30 - 16;
 }
 
 void Player::Reset() {
