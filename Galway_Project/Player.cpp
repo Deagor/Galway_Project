@@ -68,12 +68,14 @@ void Player::MovePlayer() {
 			{
 				desiredVelY = -10;
 				grounded = false;
+				AudioManager::GetInstance()->PlaySoundEffect(2);
 			}
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_SPACE) && hasBullet)
 		{ 
 			Shoot();
+			AudioManager::GetInstance()->PlaySoundEffect(1);
 		}
 	}
 	else if (!player1)
@@ -96,12 +98,14 @@ void Player::MovePlayer() {
 			{
 				desiredVelY = -10;
 				grounded = false;
+				AudioManager::GetInstance()->PlaySoundEffect(2);
 			}
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_RETURN) && hasBullet)
 		{
 			Shoot();
+			AudioManager::GetInstance()->PlaySoundEffect(1);
 		}
 	}
 
