@@ -11,7 +11,7 @@ enum _entityCategory {
 Player::Player(b2World* world, float x, float y, bool isPlayer1) : m_world(world) {
 	reset = false;
 	grounded = false;
-	direction = 1;
+	direction = 1; 
 	player1 = isPlayer1;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
@@ -26,7 +26,7 @@ void Player::createBox2dBody(float x, float y, bool isPlayer1) {
 	bodyDef.position.Set(x / 30, y / 30);
 	if (isPlayer1) { bodyDef.userData = "Player"; }
 	else { bodyDef.userData = "Player"; }
-	bodyDef.gravityScale = 1;
+	bodyDef.gravityScale = 3;
 	body = m_world->CreateBody(&bodyDef);
 	dynamicBox.SetAsBox((32 / 2.0f) / 30, (32 / 2.0f) / 30);
 	fixtureDef.shape = &dynamicBox;
@@ -82,14 +82,14 @@ void Player::MovePlayer() {
 		{
 			if (grounded)
 			{
-				desiredVelY = -10;
+				desiredVelY = -15;
 				grounded = false;
 				AudioManager::GetInstance()->PlaySoundEffect(2);
 			}
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_SPACE) && hasBullet)
-		{
+		{ 
 			Shoot();
 			AudioManager::GetInstance()->PlaySoundEffect(1);
 		}
@@ -112,7 +112,7 @@ void Player::MovePlayer() {
 		{
 			if (grounded)
 			{
-				desiredVelY = -10;
+				desiredVelY = -15;
 				grounded = false;
 				AudioManager::GetInstance()->PlaySoundEffect(2);
 			}
@@ -145,7 +145,7 @@ void Player::Update(b2World* world) {
 	spriteRect->y = body->GetPosition().y * 30 - 16;
 }
 
-void Player::Shoot() {
+void Player::Shoot() { 
 	if (hasBullet) {
 		if (direction == 0)
 		{
@@ -184,4 +184,9 @@ bool Player::isPlayer1()
 
 void Player::PickupBullet() {
 	hasBullet = true;
+}
+
+void Player::SetGrounded(bool set)
+{
+	grounded = set;
 }

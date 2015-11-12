@@ -28,7 +28,7 @@
 #include "Bullet.h"
 #include "AudioManager.h"
 #include "ContactListener.h"
-
+#include "LevelManager.h"
 
 
 #include <SDL.h>

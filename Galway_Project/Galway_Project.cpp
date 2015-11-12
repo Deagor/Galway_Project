@@ -26,21 +26,15 @@ int main(int argc, char *argv[])
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact); 
 
+	LevelManager lvlMngr(&world);
+
 	Uint32 lastFrameTime = 0;
 	Uint32 frameDelay = 0;
 
 	SDL_Event e;
 	bool quit = false;
 
-	Platform platform = Platform(&world, 0, 680, 1280, 40, "Platform");
-	Platform platform2 = Platform(&world, 0, 0, 1280, 40, "Boundary");
-	Platform platform3 = Platform(&world, 0, 0, 40, 720, "Boundary");
-	Platform platform4 = Platform(&world, 1240, 0, 40, 720, "Boundary");
-
-	Platform platform5 = Platform(&world, 200, 640, 40, 40, "Boundary");
-
-	Player player1(&world, 100, 100,true);
-	Player player2(&world, 300, 100, false);
+	
 
 	AudioManager::GetInstance()->Init();
 	AudioManager::GetInstance()->LoadMedia();
@@ -63,12 +57,8 @@ int main(int argc, char *argv[])
 		int32 velocityIterations = 6;
 		int32 positionIterations = 2;
 		world.Step(timeStep, velocityIterations, positionIterations);
-
-		player1.Update(&world);
-		player1.MovePlayer();
-
-		player2.Update(&world);
-		player2.MovePlayer();
+		lvlMngr.Update();
+		
 
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
