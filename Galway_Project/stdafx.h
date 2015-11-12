@@ -24,6 +24,7 @@
 #include "InputManager.h"
 #include "Player.h"
 #include "Render.h"
+#include "Bullet.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
