@@ -1,5 +1,6 @@
-#include "Platform.h" 
+
 #include "stdafx.h"
+#include "Platform.h" 
 
 enum _entityCategory {
 	BOUNDARY = 0x0001,
@@ -10,6 +11,7 @@ enum _entityCategory {
 
 Platform::Platform(b2World* world, float x, float y, float w, float h, std::string name) : mWorld(world), mSize(w, h)
 {
+ 
 	LoadAssets(x, y, w, h);
 	createBox2dBody(x, y, w, h, name);
 }
@@ -61,7 +63,7 @@ void Platform::LoadAssets(float x, float y, float w, float h)
 
 void Platform::Update()
 {
-	if (moveDistance > 200)
+	/*if (moveDistance > 200)
 	{
 		moving = false;
 		moveDistance = 100;
@@ -81,9 +83,16 @@ void Platform::Update()
 			moveDistance--;
 			mBody->SetTransform(b2Vec2(mBody->GetPosition().x, mBody->GetPosition().y + 1 / 30.0f), 0);
 		}
-	}
+	}*/
 	rcSprite->x = mBody->GetPosition().x * 30 - mSize.x / 2;
 	rcSprite->y = mBody->GetPosition().y * 30 - mSize.y / 2;
+
+	if (offset > 0) {
+		offset -= 2;
+		b2Vec2 pos = mBody->GetPosition();
+		mBody->SetTransform(b2Vec2(pos.x, pos.y + (2)), 0);
+	}
+
 }
 
 void Platform::ToggleMove()
@@ -91,7 +100,11 @@ void Platform::ToggleMove()
 	moving = true;
 }
 
-b2Vec2 Platform::GetSize() const
+b2Vec2 Platform::getSize()
 {
 	return mSize;
+}
+
+void Platform::ChangeLevel() {
+	offset = 24;
 }

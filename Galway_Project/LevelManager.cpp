@@ -97,7 +97,7 @@ LevelManager::LevelManager(b2World* world)
 	boundries.push_back(boundry1);
 	boundries.push_back(boundry2);
 	boundries.push_back(boundry3);
-	platforms.push_back(boundryGround);
+	boundries.push_back(boundryGround);
 
 	player1 = new Player(theWorld, 100, 100, true);
 	player2 = new Player(theWorld, 300, 100, false);
@@ -110,8 +110,21 @@ void LevelManager::Update()
 
 	player2->Update(theWorld);
 	player2->MovePlayer();
+
+	int size = platforms.size();
+
+	for (int i = 0; i < size; i++) {
+		platforms[i]->Update();
+	}
 }
 
+void LevelManager::ChangeLevel() {
+	int size = platforms.size();
+
+	for (int i = 0; i < size; i++) {
+		platforms[i]->ChangeLevel();
+	}
+}
 
 LevelManager::~LevelManager()
 {

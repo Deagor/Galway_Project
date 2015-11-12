@@ -7,15 +7,16 @@
 #include "Player.h" 
 #include "Platform.h" 
 #include "Bullet.h"
+#include "LevelManager.h"
 
 class ContactListener : public b2ContactListener {
 private:
-	//Level* level;
-	//Menu* menu;
+	LevelManager* level;
+
 public:
 
-	ContactListener() : b2ContactListener() {
-
+	ContactListener(LevelManager* l) : b2ContactListener() {
+		level = l;
 	}
 
 	/*void PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
@@ -123,11 +124,14 @@ public:
 				else if (!static_cast<Player*>(bodyUserData1)->isPlayer1() && static_cast<Bullet*>(bodyUserData2)->isBullet1())
 				{
 					if (static_cast<Bullet*>(bodyUserData2)->getAlive()) {
-
+						level->ChangeLevel(); 
+						static_cast<Bullet*>(bodyUserData2)->Reset();
 					}
 				}
 				else if (static_cast<Player*>(bodyUserData1)->isPlayer1() && !static_cast<Bullet*>(bodyUserData2)->isBullet1()) {
 					if (static_cast<Bullet*>(bodyUserData2)->getAlive()) {
+						level->ChangeLevel(); 
+						static_cast<Bullet*>(bodyUserData2)->Reset();
 
 					}
 				}
@@ -148,11 +152,15 @@ public:
 				{
 					if (static_cast<Bullet*>(bodyUserData2)->getAlive()) {
 
+						level->ChangeLevel(); 
+						static_cast<Bullet*>(bodyUserData2)->Reset();
 					} 
 				}
 				else if (static_cast<Player*>(bodyUserData1)->isPlayer1() && !static_cast<Bullet*>(bodyUserData2)->isBullet1()) {
 					if (static_cast<Bullet*>(bodyUserData2)->getAlive()) {
 
+						level->ChangeLevel();
+						static_cast<Bullet*>(bodyUserData2)->Reset();
 					}
 				}
 			}

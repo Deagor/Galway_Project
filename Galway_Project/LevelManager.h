@@ -12,5 +12,6 @@ public:
 	LevelManager(b2World*);
 	void Update();
 	~LevelManager();
+	void ChangeLevel();
 };
 

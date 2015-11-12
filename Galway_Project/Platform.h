@@ -20,17 +20,18 @@ private:
 	b2PolygonShape mShape;
 	b2FixtureDef mFixtureDef;
 	void createBox2dBody(float, float, float, float, std::string name);
-	void LoadAssets(float, float, float, float);
+	void LoadAssets(float, float, float, float); 
 	b2Vec2 mSize;
 	bool moving;
 	int moveDistance = 0;
+	int offset = 0;
 
 public:
+	Platform(b2World*, float, float, float, float, std::string name);
 	void ToggleMove();
 	void Update();
-	Platform(b2World*, float, float, float, float, std::string name);
-	b2Vec2 GetSize() const;
-	Platform() {};
+	b2Vec2 getSize(); 
+	void ChangeLevel();
 };
 
 #endif
