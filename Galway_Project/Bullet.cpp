@@ -8,6 +8,8 @@ Bullet::Bullet(b2World* world, float x, float y, bool player) : m_world(world), 
 	resetPos = b2Vec2(-500, 0);
 	LoadAssets(x, y);
 	currentDirection = NOTMOVING;
+
+	bullet1 = player;
 }
 
 //destructor(destroy the body!)
@@ -102,6 +104,11 @@ void Bullet::HitWall()
 void Bullet::Reset()
 {
 	reset = true;
+}
+
+bool Bullet::isBullet1()
+{
+	return bullet1;
 }
 
 //set the bodies position to be the players position

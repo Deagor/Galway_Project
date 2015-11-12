@@ -128,3 +128,8 @@ void Player::Ground()
 {
 	grounded = true;
 }
+
+bool Player::isPlayer1()
+{
+	return player1;
+}
