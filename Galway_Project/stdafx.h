@@ -27,6 +27,8 @@
 #include "Platform.h"
 #include "Bullet.h"
 
+#include "ContactListener.h"
+
 #include <SDL.h>
 #include <SDL_ttf.h>
 
