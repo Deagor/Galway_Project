@@ -18,7 +18,7 @@ public:
 		
 	}
 
-	void BeginContact(b2Contact* contact)
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 	{
 		void* fixAType = contact->GetFixtureA()->GetBody()->GetUserData();
 		void* fixBType = contact->GetFixtureB()->GetBody()->GetUserData();
@@ -57,6 +57,12 @@ public:
 				}
 			}
 		}
+	}
+
+	void BeginContact(b2Contact* contact)
+	{
+		void* fixAType = contact->GetFixtureA()->GetBody()->GetUserData();
+		void* fixBType = contact->GetFixtureB()->GetBody()->GetUserData();
 
 		if (fixAType == "Player" && fixBType == "Platform"
 			|| fixAType == "Platform" && fixBType == "Player") {

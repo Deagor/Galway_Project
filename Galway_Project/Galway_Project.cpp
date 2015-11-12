@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
 	Player player1(&world, 100, 100,true);
 	Player player2(&world, 300, 100, false);
 
+	AudioManager::GetInstance()->Init();
+	AudioManager::GetInstance()->LoadMedia();
+
 	while (!quit)
 	{
 		// Update loop
@@ -54,7 +57,7 @@ int main(int argc, char *argv[])
 		}
 		
 		Render::GetInstance()->Update();
-		InputManager::GetInstance()->UpdateKeyboardState();
+		
 		//move the simulation forward
 		float32 timeStep = 1.0f / 60.0f;
 		int32 velocityIterations = 6;
@@ -77,6 +80,7 @@ int main(int argc, char *argv[])
 			{
 				quit = true;
 			}
+
 			//User presses a key
 			else if (e.type == SDL_KEYDOWN)
 			{
@@ -93,6 +97,7 @@ int main(int argc, char *argv[])
 			}
 		}//End Poll Events
 
+		InputManager::GetInstance()->UpdateKeyboardState();
 	}//End Game loop
 	SDL_Quit();
     return 0;
