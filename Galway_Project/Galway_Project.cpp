@@ -87,10 +87,10 @@ int main(int argc, char *argv[])
 
 
 			}
-		}
+		}//End Poll Events
 
-	}
+	}//End Game loop
 	SDL_Quit();
     return 0;
-}
+} //End Main
 
