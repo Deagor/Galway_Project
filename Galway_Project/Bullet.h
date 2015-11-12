@@ -25,6 +25,8 @@ private:
 
 	bool bullet1;
 
+	bool alive;
+
 	enum Directions
 	{
 		LEFT,
@@ -66,6 +68,8 @@ public:
 
 	//no comment
 	void setDirection(int);
+
+	bool getAlive();
 };
 
 #endif

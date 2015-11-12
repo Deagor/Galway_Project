@@ -1,20 +1,27 @@
 #include "stdafx.h"
 #include "Player.h"
 
-Player::Player(b2World* world, float x, float y,bool isPlayer1) : m_world(world) {
+enum _entityCategory {
+	BOUNDARY = 0x0001,
+	PLATFORM = 0x0002,
+	BULLET = 0x0004,
+	PLAYER = 0x0008
+};
+
+Player::Player(b2World* world, float x, float y, bool isPlayer1) : m_world(world) {
 	reset = false;
 	grounded = false;
 	direction = 1; 
 	player1 = isPlayer1;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
-	createBox2dBody(x, y,isPlayer1);
+	createBox2dBody(x, y, isPlayer1);
 	LoadAssets(x, y);
 	bullet = new Bullet(m_world, -100000, 0, player1);
 	hasBullet = true;
 }
 
-void Player::createBox2dBody(float x, float y,bool isPlayer1) {
+void Player::createBox2dBody(float x, float y, bool isPlayer1) {
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x / 30, y / 30);
 	if (isPlayer1) { bodyDef.userData = "Player"; }
@@ -28,6 +35,15 @@ void Player::createBox2dBody(float x, float y,bool isPlayer1) {
 	fixtureDef.friction = 0.3f;
 	fixtureDef.userData = this;
 	fixtureDef.restitution = b2MixRestitution(0, 0);
+
+	if (player1) {
+		fixtureDef.filter.categoryBits = PLAYER;
+		fixtureDef.filter.maskBits = PLAYER | PLATFORM | BULLET;
+	}
+	else {
+		fixtureDef.filter.categoryBits = PLAYER;
+		fixtureDef.filter.maskBits = PLAYER | PLATFORM | BULLET;
+	}
 
 	body->CreateFixture(&fixtureDef);
 	body->SetFixedRotation(true);
@@ -133,13 +149,13 @@ void Player::Shoot() {
 	if (hasBullet) {
 		if (direction == 0)
 		{
-			bullet->setPosition((spriteRect->x + 11) / 30, (spriteRect->y + 32) / 30);
+			bullet->setPosition((spriteRect->x + 10) / 30, (spriteRect->y + 32) / 30);
 			bullet->setDirection(direction);
 			hasBullet = false;
 		}
 		if (direction == 1)
 		{
-			bullet->setPosition((spriteRect->x + 41) / 30, (spriteRect->y + 32) / 30);
+			bullet->setPosition((spriteRect->x + 60) / 30, (spriteRect->y + 32) / 30);
 			bullet->setDirection(direction);
 			hasBullet = false;
 		}
@@ -164,6 +180,10 @@ void Player::Ground()
 bool Player::isPlayer1()
 {
 	return player1;
+}
+
+void Player::PickupBullet() {
+	hasBullet = true;
 }
 
 void Player::SetGrounded(bool set)
