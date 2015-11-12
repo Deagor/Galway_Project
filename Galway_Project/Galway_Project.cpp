@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
 	Player player1(&world, 100, 100,true);
 	Player player2(&world, 300, 100, false);
 
+	AudioManager::GetInstance()->Init();
+	AudioManager::GetInstance()->LoadMedia();
+
 	while (!quit)
 	{
 		// Update loop
@@ -73,6 +76,7 @@ int main(int argc, char *argv[])
 			{
 				quit = true;
 			}
+
 			//User presses a key
 			else if (e.type == SDL_KEYDOWN)
 			{

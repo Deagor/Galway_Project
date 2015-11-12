@@ -2,13 +2,19 @@
 #define AUDIOMANGER
 
 class AudioManager {
-public:
+private:
 	AudioManager();
+	~AudioManager();
+	Mix_Chunk *shoot_sfx;
+	Mix_Chunk *jump_sfx;
+	Mix_Chunk *hit_sfx;
+
+
+public:
+	static AudioManager* GetInstance();
+	
 	void Init();
 	void LoadMedia();
 	void PlaySoundEffect(int effect);
-
-private:
-
 };
 #endif

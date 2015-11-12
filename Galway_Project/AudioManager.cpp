@@ -1,19 +1,34 @@
 #include "stdafx.h"
 #include "AudioManager.h"
 
-Mix_Chunk *step_sfx = NULL;
-Mix_Chunk *jump_sfx = NULL;
-Mix_Chunk *pickUp_sfx = NULL;
-Mix_Chunk *rewindTime_sfx = NULL;
+static bool instanceFlag = false;
+static AudioManager* instance = NULL;
 
-AudioManager::AudioManager(){
+AudioManager* AudioManager::GetInstance()
+{
+	if (!instanceFlag)
+	{
+		instance = new AudioManager();
+		instanceFlag = true;
+		return instance;
+	}
+	else
+	{
+		return instance;
+	}
+}
 
+AudioManager::AudioManager()
+{
+	shoot_sfx = NULL;
+	jump_sfx = NULL;
+	hit_sfx = NULL;
 }
 
 void AudioManager::Init()
 {
 	//Initialize SDL
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	SDL_Init(SDL_INIT_AUDIO);
 
 	//Initialize SDL_mixer
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
@@ -21,28 +36,33 @@ void AudioManager::Init()
 
 void AudioManager::LoadMedia()
 {
+	std::string basepath(SDL_GetBasePath());
+	std::string jumpPath = basepath + "../Sounds/jump.wav";
+	std::string shootPath = basepath + "../Sounds/shoot.wav";
+	std::string hitPath = basepath + "../Sounds/hitSound.wav";
+
 	//Load sound effects
-	step_sfx = Mix_LoadWAV("step.wav");
-	jump_sfx = Mix_LoadWAV("jump.wav");
-	pickUp_sfx = Mix_LoadWAV("pickup.wav");
-	rewindTime_sfx = Mix_LoadWAV("rewind.wav");
+	jump_sfx = Mix_LoadWAV(jumpPath.c_str());
+	shoot_sfx = Mix_LoadWAV(shootPath.c_str());
+	hit_sfx = Mix_LoadWAV(hitPath.c_str());
 }
 
 void AudioManager::PlaySoundEffect(int effect){
-	if (effect == 1)
+	if (effect == 1)//shoot
 	{
-		Mix_PlayChannel(-1, step_sfx, 0);
+		Mix_PlayChannel(-1, shoot_sfx, 0);
 	}
-	else if (effect == 2)
+	else if (effect == 2)//jump
 	{
 		Mix_PlayChannel(-1, jump_sfx, 0);
 	}
-	if (effect == 3)
+	if (effect == 3)//hit
 	{
-		Mix_PlayChannel(-1, pickUp_sfx, 0);
+		Mix_PlayChannel(-1, hit_sfx, 0);
 	}
-	else if (effect == 4)
-	{
-		Mix_PlayChannel(-1, rewindTime_sfx, 0);
-	}
+}
+
+AudioManager::~AudioManager()
+{
+	instanceFlag = false;
 }
