@@ -62,11 +62,10 @@
     <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Platform.cpp">
-=======
+	  <Filter>Source Files</Filter>
+	 </ClCompile>
     <ClCompile Include="Bullet.cpp">
->>>>>>> 938e03012d0ecc8c8d85a672c6d491dd5ad4548e
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
