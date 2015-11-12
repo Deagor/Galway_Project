@@ -26,8 +26,10 @@
 #include "Player.h"
 #include "Platform.h"
 #include "Bullet.h"
-
+#include "AudioManager.h"
 #include "ContactListener.h"
+
+
 
 #include <SDL.h>
 #include <SDL_ttf.h>
