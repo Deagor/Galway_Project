@@ -9,6 +9,7 @@ public:
 	~InputManager()
 	{
 		instanceFlag = false;
+		processMutex = SDL_CreateMutex();
 	}
 
 	void UpdateKeyboardState();
@@ -34,6 +35,8 @@ private:
 	std::vector<SDL_Keycode> heldKeys;
 	std::vector<SDL_Keycode> upKeys;
 	std::vector<SDL_Keycode> mouseClicks;
+
+	SDL_mutex* processMutex = NULL;
 
 	static bool instanceFlag;
 	static InputManager *instance;

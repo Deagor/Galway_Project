@@ -65,33 +65,41 @@ void InputManager::UpdatePolledEvents(SDL_Event e)
 
 bool InputManager::IsKeyDown(SDL_Keycode key)
 {
+	SDL_LockMutex(processMutex);
 	auto iter = std::find(downKeys.begin(), downKeys.end(), key);
 
 	if (iter != downKeys.end()) {
 		return true;
 	}
+	SDL_UnlockMutex(processMutex);
 
 	return false;
 }
 
 bool InputManager::IsKeyHeld(SDL_Keycode key)
 {
+	SDL_LockMutex(processMutex);
 	auto iter = std::find(heldKeys.begin(), heldKeys.end(), key);
 
 	if (iter != heldKeys.end())
 	{
 		return true;
 	}
+	SDL_UnlockMutex(processMutex);
+
 	return false;
 }
 
 bool InputManager::IsKeyUp(SDL_Keycode key)
 {
+	SDL_LockMutex(processMutex);
 	auto iter = std::find(upKeys.begin(), upKeys.end(), key);
 	
 	if (iter != upKeys.end())
 	{
 		return true;
 	}
+	SDL_UnlockMutex(processMutex);
+
 	return false;
 }

@@ -3,6 +3,15 @@
 
 #include "stdafx.h"
 
+int ThreadFunction(void* threadData)
+{
+	for (int i = 0; i < 10000; i++)
+	{
+		std::cout << "Thread Number: " << (int)threadData << std::endl;
+	}
+	return 0;
+}
+
 void CreateGround(b2World& World, float X, float Y)
 {
 	b2BodyDef BodyDef;
@@ -38,6 +47,10 @@ int main(int argc, char *argv[])
 	AudioManager::GetInstance()->Init();
 	AudioManager::GetInstance()->LoadMedia();
 
+	int d = 0;
+	//SDL_Thread* player1Thread = SDL_CreateThread(lvlMngr.MovePlayer1, "Player1MoveThread", (void*)d);
+	//SDL_Thread* player2Thread = SDL_CreateThread(lvlMngr.MovePlayer2, "Player2MoveThread", (void*)d);
+	SDL_Thread* testThread = SDL_CreateThread(ThreadFunction, "Test Thread", (void*)d);
 	while (!quit)
 	{
 		// Update loop
@@ -58,6 +71,7 @@ int main(int argc, char *argv[])
 		world.Step(timeStep, velocityIterations, positionIterations);
 		lvlMngr.Update();
 		
+
 
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -88,6 +102,9 @@ int main(int argc, char *argv[])
 
 		InputManager::GetInstance()->UpdateKeyboardState();
 	}//End Game loop
+
+	SDL_WaitThread(testThread, NULL);
+
 	SDL_Quit();
     return 0;
 } //End Main

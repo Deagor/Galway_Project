@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include <SDL_mixer.h>
+#include <SDL_thread.h>
 
 #include "InputManager.h"
 #include "Render.h"

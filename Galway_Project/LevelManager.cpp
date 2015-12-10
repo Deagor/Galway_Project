@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "LevelManager.h"
 
-
 LevelManager::LevelManager(b2World* world)
 {
 	theWorld = world;
@@ -101,14 +100,21 @@ LevelManager::LevelManager(b2World* world)
 
 	player1 = new Player(theWorld, 100, 100, true);
 	player2 = new Player(theWorld, 300, 100, false);
+
+	//int d = 0;
+	//SDL_Thread* player1Thread = SDL_CreateThread(MovePlayer1, "Player1MoveThread", (void*)d);
+	//SDL_Thread* player2Thread = SDL_CreateThread(MovePlayer2, "Player2MoveThread", (void*)d);
 }
 
 void LevelManager::Update()
 {
+	//int d = 0;
 	player1->Update(theWorld);
+	//SDL_Thread* player1Thread = SDL_CreateThread(MovePlayer1, "Player1MoveThread", (void*)d);
 	player1->MovePlayer();
 
 	player2->Update(theWorld);
+	//SDL_Thread* player2Thread = SDL_CreateThread(MovePlayer2, "Player2MoveThread", (void*)d);
 	player2->MovePlayer();
 
 	int size = platforms.size();
@@ -116,6 +122,20 @@ void LevelManager::Update()
 	for (int i = 0; i < size; i++) {
 		platforms[i]->Update();
 	}
+	//SDL_WaitThread(player1Thread, NULL);
+	//SDL_WaitThread(player2Thread, NULL);
+}
+
+int LevelManager::MovePlayer1(void* data)
+{
+	player1->MovePlayer();
+	return 0;
+}
+
+int LevelManager::MovePlayer2(void* data)
+{
+	player2->MovePlayer();
+	return 0;
 }
 
 void LevelManager::ChangeLevel() {
