@@ -3,12 +3,14 @@
 
 #include "stdafx.h"
 
+//fps counter: http://lazyfoo.net/tutorials/SDL/24_calculating_frame_rate/index.php
+
 int ThreadFunction(void* threadData)
 {
-	for (int i = 0; i < 10000; i++)
-	{
-		std::cout << "Thread Number: " << (int)threadData << std::endl;
-	}
+	//for (int i = 0; i < 10000; i++)
+	//{
+	//	std::cout << "Thread Number: " << (int)threadData << std::endl;
+	//}
 	return 0;
 }
 
@@ -30,6 +32,9 @@ void CreateGround(b2World& World, float X, float Y)
 
 int main(int argc, char *argv[])
 {
+	Uint32 startTicks = SDL_GetTicks();
+	int countedFrames = 0;
+
 	b2Vec2 Gravity(0.f, 9.8f);
 	b2World world(Gravity);
 
@@ -71,7 +76,17 @@ int main(int argc, char *argv[])
 		world.Step(timeStep, velocityIterations, positionIterations);
 		lvlMngr.Update();
 		
+		Uint32 time = 0;
+		time = SDL_GetTicks() - startTicks;
 
+		//Calculate and correct fps 
+		float avgFPS = countedFrames / (time / 1000.f ); 
+		if( avgFPS > 2000000 ) 
+		{ 
+			avgFPS = 0; 
+		}
+
+		std::cout << "Average FPS: " << avgFPS << std::endl;
 
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -101,6 +116,8 @@ int main(int argc, char *argv[])
 		}//End Poll Events
 
 		InputManager::GetInstance()->UpdateKeyboardState();
+
+		++countedFrames;
 	}//End Game loop
 
 	SDL_WaitThread(testThread, NULL);
