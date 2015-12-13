@@ -2,6 +2,10 @@
 class LevelManager
 {
 private:
+	LevelManager()
+	{
+
+	}
 	std::vector<Platform*> platforms;
 	std::vector<Platform*> boundries;
 
@@ -9,10 +13,21 @@ private:
 
 	b2World* theWorld;
 
+	static bool instanceFlag;
+	static LevelManager *instance;
+
 public:
-	LevelManager(b2World*);
+	static LevelManager* GetInstance();
+	~LevelManager()
+	{
+		instanceFlag = false;
+	}
+
+	//LevelManager(b2World*);
+
+	void SetUpLevels(b2World*);
+
 	void Update();
-	~LevelManager();
 	void ChangeLevel();
 	int MovePlayer1(void* data);
 	int MovePlayer2(void* data);

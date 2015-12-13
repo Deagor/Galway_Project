@@ -9,7 +9,14 @@ public:
 	~InputManager()
 	{
 		instanceFlag = false;
-		processMutex = SDL_CreateMutex();
+		//processMutex = SDL_CreateMutex();
+		updateKeyboardStateMutex = SDL_CreateMutex();
+		addDownKeysMutex = SDL_CreateMutex();
+		heldKeysEraseMutex = SDL_CreateMutex();
+
+		isKeyDownMutex = SDL_CreateMutex();
+		isKeyHeldMutex = SDL_CreateMutex();
+		isKeyUpMutex = SDL_CreateMutex();
 	}
 
 	void UpdateKeyboardState();
@@ -36,7 +43,15 @@ private:
 	std::vector<SDL_Keycode> upKeys;
 	std::vector<SDL_Keycode> mouseClicks;
 
-	SDL_mutex* processMutex = NULL;
+	//SDL_mutex* processMutex = NULL;
+
+	SDL_mutex* updateKeyboardStateMutex = NULL;
+	SDL_mutex* addDownKeysMutex = NULL;
+	SDL_mutex* heldKeysEraseMutex = NULL;
+	
+	SDL_mutex* isKeyDownMutex = NULL;
+	SDL_mutex* isKeyHeldMutex = NULL;
+	SDL_mutex* isKeyUpMutex = NULL;
 
 	static bool instanceFlag;
 	static InputManager *instance;

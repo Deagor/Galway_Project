@@ -1,7 +1,24 @@
 #include "stdafx.h"
 #include "LevelManager.h"
 
-LevelManager::LevelManager(b2World* world)
+bool LevelManager::instanceFlag = false;
+LevelManager* LevelManager::instance = NULL;
+
+LevelManager* LevelManager::GetInstance()
+{
+	if (!instanceFlag)
+	{
+		instance = new LevelManager();
+		instanceFlag = true;
+		return instance;
+	}
+	else
+	{
+		return instance;
+	}
+}
+
+void LevelManager::SetUpLevels(b2World* world)
 {
 	theWorld = world;
 
@@ -21,12 +38,12 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform9 = new Platform(theWorld, 40, 190, 150, 20, "Platform");
 	Platform* platform9nd3Q = new Platform(theWorld, 520, 190, 150, 20, "Platform");
 	Platform* platform10 = new Platform(theWorld, 1090, 190, 150, 20, "Platform");
-	Platform* platform11 = new Platform(theWorld, 560, 400, 100, 20,"Platform");
+	Platform* platform11 = new Platform(theWorld, 560, 400, 100, 20, "Platform");
 
 
 	//**Level 2**
-	Platform* platform12 = new Platform(theWorld, 40, 580- 720, 150, 20, "Platform");
-	Platform* platform13 = new Platform(theWorld, 1090, 580- 720, 150, 20, "Platform");
+	Platform* platform12 = new Platform(theWorld, 40, 580 - 720, 150, 20, "Platform");
+	Platform* platform13 = new Platform(theWorld, 1090, 580 - 720, 150, 20, "Platform");
 	Platform* platform14 = new Platform(theWorld, 300, 500 - 720, 200, 20, "Platform");
 	Platform* platform15 = new Platform(theWorld, 750, 500 - 720, 200, 20, "Platform");
 
@@ -37,10 +54,10 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform18 = new Platform(theWorld, 1090, 200 - 720, 150, 20, "Platform");
 	Platform* platform19 = new Platform(theWorld, 300, 300 - 720, 200, 20, "Platform");
 	Platform* platform20 = new Platform(theWorld, 750, 300 - 720, 200, 20, "Platform");
-	Platform* platform21= new Platform(theWorld, 515, 140 - 720, 245, 20, "Platform");
+	Platform* platform21 = new Platform(theWorld, 515, 140 - 720, 245, 20, "Platform");
 
 	//**Level 3**
-	Platform* platform22 = new Platform(theWorld, 520, 580-1440, 80, 20, "Platform");
+	Platform* platform22 = new Platform(theWorld, 520, 580 - 1440, 80, 20, "Platform");
 	Platform* platform23 = new Platform(theWorld, 300, 500 - 1440, 150, 20, "Platform");
 	Platform* platform24 = new Platform(theWorld, 700, 500 - 1440, 150, 20, "Platform");
 	Platform* platform25 = new Platform(theWorld, 150, 400 - 1440, 100, 20, "Platform");
@@ -51,7 +68,7 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform29 = new Platform(theWorld, 750, 240 - 1440, 80, 20, "Platform");
 	Platform* platform30 = new Platform(theWorld, 950, 180 - 1440, 150, 20, "Platform");
 
-	Platform* platform31= new Platform(theWorld, 240, 240 - 1440, 245, 20, "Platform");
+	Platform* platform31 = new Platform(theWorld, 240, 240 - 1440, 245, 20, "Platform");
 	Platform* platform32 = new Platform(theWorld, 100, 180 - 1440, 100, 20, "Platform");
 
 	platforms.push_back(platform);
@@ -101,40 +118,40 @@ LevelManager::LevelManager(b2World* world)
 	player1 = new Player(theWorld, 100, 100, true);
 	player2 = new Player(theWorld, 300, 100, false);
 
-	//int d = 0;
-	//SDL_Thread* player1Thread = SDL_CreateThread(MovePlayer1, "Player1MoveThread", (void*)d);
-	//SDL_Thread* player2Thread = SDL_CreateThread(MovePlayer2, "Player2MoveThread", (void*)d);
 }
 
 void LevelManager::Update()
 {
-	//int d = 0;
 	player1->Update(theWorld);
-	//SDL_Thread* player1Thread = SDL_CreateThread(MovePlayer1, "Player1MoveThread", (void*)d);
-	player1->MovePlayer();
+	//player1->MovePlayer();
 
 	player2->Update(theWorld);
-	//SDL_Thread* player2Thread = SDL_CreateThread(MovePlayer2, "Player2MoveThread", (void*)d);
-	player2->MovePlayer();
+	//player2->MovePlayer();
 
 	int size = platforms.size();
 
 	for (int i = 0; i < size; i++) {
 		platforms[i]->Update();
 	}
-	//SDL_WaitThread(player1Thread, NULL);
-	//SDL_WaitThread(player2Thread, NULL);
 }
 
 int LevelManager::MovePlayer1(void* data)
 {
-	player1->MovePlayer();
+	while (true)
+	{
+		player1->MovePlayer();
+		std::cout << "MovePlayer1" << std::endl;
+	}
 	return 0;
 }
 
 int LevelManager::MovePlayer2(void* data)
 {
-	player2->MovePlayer();
+	while (true)
+	{
+		player2->MovePlayer();
+		std::cout << "MovePlayer2" << std::endl;
+	}
 	return 0;
 }
 
@@ -144,8 +161,4 @@ void LevelManager::ChangeLevel() {
 	for (int i = 0; i < size; i++) {
 		platforms[i]->ChangeLevel();
 	}
-}
-
-LevelManager::~LevelManager()
-{
 }
