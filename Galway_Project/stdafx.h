@@ -15,6 +15,7 @@
 #include <tchar.h>
 #include <vector>
 #include <list>
+#include <sstream>
 #include <string>
 #include <algorithm>
 #include <iostream>
@@ -33,6 +34,8 @@
 #include "ThreadingGlobals.h"
 
 #include <SDL.h>
-#include <SDL_ttf.h>
+#include <SDL_ttf.h> 
+
+#include "LTimer.h"
 
 // TODO: reference additional headers your program requires here

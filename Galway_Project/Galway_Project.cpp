@@ -21,6 +21,15 @@ void CreateGround(b2World& World, float X, float Y)
 
 int main(int argc, char *argv[])
 {
+	//fps counter code
+	//Set text color as black 
+	SDL_Color textColor = { 0, 0, 0, 255 }; //The frames per second timer 
+	LTimer fpsTimer; //In memory text stream 
+	std::stringstream timeText;
+	//Start counting frames per second 
+	int countedFrames = 0; 
+	fpsTimer.start();
+
 	b2Vec2 Gravity(0.f, 9.8f);
 	b2World world(Gravity);
 
@@ -41,7 +50,7 @@ int main(int argc, char *argv[])
 	while (!quit)
 	{
 		// Update loop
-		// gets the deltaTime between frames, pass 'frameDelay' to updates
+		// gets the deltaTime between frames, pass 'frameDelay' to updates		
 		Uint32 currentFrameTime = SDL_GetTicks();
 		if (currentFrameTime > lastFrameTime)
 		{
@@ -49,6 +58,13 @@ int main(int argc, char *argv[])
 			lastFrameTime = currentFrameTime;
 		}
 		
+		//Calculate and correct fps 
+		float avgFPS = countedFrames / ( fpsTimer.getTicks() / 1000.f ); 
+		if( avgFPS > 2000000 ) { avgFPS = 0; }
+
+		std::cout << "FPS is: " << avgFPS << std::endl;
+
+
 		Render::GetInstance()->Update();
 		
 		//move the simulation forward
@@ -87,6 +103,8 @@ int main(int argc, char *argv[])
 		}//End Poll Events
 
 		InputManager::GetInstance()->UpdateKeyboardState();
+
+		countedFrames++;
 	}//End Game loop
 	SDL_Quit();
     return 0;
