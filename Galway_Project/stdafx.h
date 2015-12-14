@@ -30,6 +30,7 @@
 #include "ContactListener.h"
 #include "LevelManager.h"
 
+#include "ThreadingGlobals.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>

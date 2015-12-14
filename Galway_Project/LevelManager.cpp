@@ -124,6 +124,9 @@ void LevelManager::ChangeLevel() {
 	for (int i = 0; i < size; i++) {
 		platforms[i]->ChangeLevel();
 	}
+
+	player1->PickupBullet();
+	player2->PickupBullet();
 }
 
 LevelManager::~LevelManager()

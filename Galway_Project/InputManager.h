@@ -37,6 +37,8 @@ private:
 
 	static bool instanceFlag;
 	static InputManager *instance;
+
+	//variables for threading
 };
 
 #endif
