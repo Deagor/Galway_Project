@@ -123,10 +123,10 @@ void LevelManager::SetUpLevels(b2World* world)
 void LevelManager::Update()
 {
 	player1->Update(theWorld);
-	//player1->MovePlayer();
+	player1->MovePlayer();
 
 	player2->Update(theWorld);
-	//player2->MovePlayer();
+	player2->MovePlayer();
 
 	int size = platforms.size();
 
@@ -137,21 +137,15 @@ void LevelManager::Update()
 
 int LevelManager::MovePlayer1(void* data)
 {
-	while (true)
-	{
-		player1->MovePlayer();
-		std::cout << "MovePlayer1" << std::endl;
-	}
+	player1->MovePlayer();
+	std::cout << "MovePlayer1" << std::endl;
 	return 0;
 }
 
 int LevelManager::MovePlayer2(void* data)
 {
-	while (true)
-	{
-		player2->MovePlayer();
-		std::cout << "MovePlayer2" << std::endl;
-	}
+	player2->MovePlayer();
+	std::cout << "MovePlayer2" << std::endl;
 	return 0;
 }
 

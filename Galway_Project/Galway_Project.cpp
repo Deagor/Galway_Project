@@ -5,23 +5,25 @@
 
 //fps counter: http://lazyfoo.net/tutorials/SDL/24_calculating_frame_rate/index.php
 
-int MovePlayer1(void* threadData)
+int updateKeyboardStateOnThread(void* threadData)
 {
-	//for (int i = 0; i < 10000; i++)
-	//{
-	//	std::cout << "Thread Number: " << (int)threadData << std::endl;
-	//}
-	LevelManager::GetInstance()->MovePlayer1(threadData);
-	//std::cout << "calling move player 1 on a thread" << std::endl;
+	while (updateKeyboardStateOnThread)
+	{
+		//LevelManager::GetInstance()->MovePlayer1(threadData);
+		InputManager::GetInstance()->UpdateKeyboardState();
+	}
 	return 0;
 }
 
-int MovePlayer2(void* threadData)
-{
-	LevelManager::GetInstance()->MovePlayer2(threadData);
-	//std::cout << "calling move player 2 on a thread" << std::endl;
-	return 0;
-}
+//int updatePolledEventsOnThread(SDL_Event* threadData)
+//{
+//	while (true)
+//	{
+//		//LevelManager::GetInstance()->MovePlayer2(threadData);
+//		//InputManager::GetInstance()->UpdatePolledEvents(*threadData);
+//	}
+//	return 0;
+//}
 
 void CreateGround(b2World& World, float X, float Y)
 {
@@ -63,8 +65,9 @@ int main(int argc, char *argv[])
 
 	int d = 0;
 
-	SDL_Thread* player1MoveThread = SDL_CreateThread(MovePlayer1, "Thread moving player 1", (void*)d);
-	SDL_Thread* player2MoveThread = SDL_CreateThread(MovePlayer2, "Thread moving player 2", (void*)d);
+	SDL_Thread* updateKeyboardThread = SDL_CreateThread(updateKeyboardStateOnThread, "Thread updating keyboard state", (void*)d);
+	bool updateKeyboardStateOnThread = true;
+	//SDL_Thread* updatePolledEventsThread = SDL_CreateThread(updatePolledEventsOnThread, "update polled event thread", static_cast<void*>(&e));
 
 	while (!quit)
 	{
@@ -102,6 +105,7 @@ int main(int argc, char *argv[])
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
+			//SDL_Thread* updatePolledEventsThread = SDL_CreateThread(updatePolledEventsOnThread, "update polled event thread", &e);
 			InputManager::GetInstance()->UpdatePolledEvents(e);
 
 			//User requests quit
@@ -117,6 +121,7 @@ int main(int argc, char *argv[])
 				{
 				case SDLK_ESCAPE:
 					quit = true;
+					updateKeyboardStateOnThread = false;
 					break;
 				default:
 					break;
@@ -125,14 +130,14 @@ int main(int argc, char *argv[])
 
 			}
 		}//End Poll Events
-		//testThread = SDL_CreateThread(MovePlayer1, "Thread moving player 1", (void*)d);
-		InputManager::GetInstance()->UpdateKeyboardState();
+		//SDL_WaitThread(updatePolledEventsThread, NULL);
+		//InputManager::GetInstance()->UpdateKeyboardState();
 
 		++countedFrames;
 	}//End Game loop
 
-	SDL_WaitThread(player1MoveThread, NULL);
-	SDL_WaitThread(player2MoveThread, NULL);
+	SDL_WaitThread(updateKeyboardThread, NULL);
+	//SDL_WaitThread(player2MoveThread, NULL);
 
 	SDL_Quit();
     return 0;
