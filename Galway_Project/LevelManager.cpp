@@ -1,7 +1,17 @@
 #include "stdafx.h"
+#include "Enemy.h"
 #include "LevelManager.h"
 
 
+
+int UpdateEnemyTargets(void *data)
+{
+	while (true) {
+		static_cast<Enemy*>(data)->SetPlayerTarget(b2Vec2(1, 1), b2Vec2(1, 1));
+	}
+
+	return 0;
+}
 LevelManager::LevelManager(b2World* world)
 {
 	theWorld = world;
@@ -89,7 +99,7 @@ LevelManager::LevelManager(b2World* world)
 	platforms.push_back(platform31);
 	platforms.push_back(platform32);
 
-	Platform* boundryGround = new Platform(theWorld, 0, 680, 1280, 40, "Platform");
+	Platform* boundryGround = new Platform(theWorld, 0, 680, 1280, 40, "Ground");
 	Platform* boundry1 = new Platform(theWorld, 0, 0, 1280, 40, "Boundary");
 	Platform* boundry2 = new Platform(theWorld, 0, 0, 40, 720, "Boundary");
 	Platform* boundry3 = new Platform(theWorld, 1240, 0, 40, 720, "Boundary");
@@ -101,6 +111,9 @@ LevelManager::LevelManager(b2World* world)
 
 	player1 = new Player(theWorld, 100, 100, true);
 	player2 = new Player(theWorld, 300, 100, false);
+	enemy = new Enemy(theWorld, 500, 100);
+
+	enemyTargetThread = SDL_CreateThread(UpdateEnemyTargets, "LazyThread", (void*)enemy);
 }
 
 void LevelManager::Update()
@@ -110,6 +123,8 @@ void LevelManager::Update()
 
 	player2->Update(theWorld);
 	player2->MovePlayer();
+
+	enemy->Update();
 
 	int size = platforms.size();
 

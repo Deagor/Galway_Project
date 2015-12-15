@@ -5,7 +5,8 @@ enum _entityCategory {
 	BOUNDARY = 0x0001,
 	PLATFORM = 0x0002,
 	BULLET = 0x0004,
-	PLAYER = 0x0008
+	PLAYER = 0x0008,
+	ENEMY = 0x00012
 };
 
 Player::Player(b2World* world, float x, float y, bool isPlayer1) : m_world(world) {
@@ -175,6 +176,11 @@ void Player::Reset() {
 void Player::Ground()
 {
 	grounded = true;
+}
+
+b2Vec2 Player::GetPosition()
+{
+	return b2Vec2(spriteRect->x, spriteRect->y);
 }
 
 bool Player::isPlayer1()

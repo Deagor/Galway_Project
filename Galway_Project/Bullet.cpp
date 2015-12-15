@@ -5,7 +5,8 @@ enum _entityCategory {
 	BOUNDARY = 0x0001,
 	PLATFORM = 0x0002,
 	BULLET = 0x0004,
-	PLAYER = 0x0008
+	PLAYER = 0x0008,
+	ENEMY = 0x00012
 };
 
 Bullet::Bullet(b2World* world, float x, float y, bool player) : m_world(world), bulletForPlayer1(player)

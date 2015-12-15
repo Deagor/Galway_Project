@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
 	SDL_Event e;
 	bool quit = false;
 
+	BodyDestroyer::GetInstance(&world);
+
 	AudioManager::GetInstance()->Init();
 	AudioManager::GetInstance()->LoadMedia();
 
@@ -64,7 +66,6 @@ int main(int argc, char *argv[])
 
 		std::cout << "FPS is: " << avgFPS << std::endl;
 
-
 		Render::GetInstance()->Update();
 		
 		//move the simulation forward
@@ -72,8 +73,9 @@ int main(int argc, char *argv[])
 		int32 velocityIterations = 6;
 		int32 positionIterations = 2;
 		world.Step(timeStep, velocityIterations, positionIterations);
-		lvlMngr.Update();
-		
+		lvlMngr.Update(); 
+
+		BodyDestroyer::GetInstance()->DestroyBodies(); 
 
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -97,8 +99,6 @@ int main(int argc, char *argv[])
 				default:
 					break;
 				}
-
-
 			}
 		}//End Poll Events
 

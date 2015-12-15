@@ -25,11 +25,13 @@
 #include "InputManager.h"
 #include "Render.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Platform.h"
 #include "Bullet.h"
 #include "AudioManager.h"
 #include "ContactListener.h"
 #include "LevelManager.h"
+#include "BodyDestroyer.h"
 
 #include "ThreadingGlobals.h"
 

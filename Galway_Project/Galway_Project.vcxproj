@@ -149,8 +149,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="BodyDestroyer.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="ContactListener.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LTimer.h" />
@@ -163,7 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="BodyDestroyer.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Galway_Project.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelManager.cpp" />

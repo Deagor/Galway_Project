@@ -27,6 +27,7 @@ public:
 	void PickupBullet();
 	void Reset();
 	void Ground();
+	b2Vec2 GetPosition();
 
 	bool isPlayer1();
 	void SetGrounded(bool set);
