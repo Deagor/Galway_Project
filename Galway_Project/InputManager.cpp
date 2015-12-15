@@ -77,39 +77,47 @@ void InputManager::downKeysPushBack(SDL_Keycode k)
 {
 	if (addDownKeysMutex != 0)
 	{
+		std::cout << "locking Mutex in downKeysPushBack" << std::endl;
 		SDL_LockMutex(addDownKeysMutex);
 		downKeys.push_back(k);
 		SDL_UnlockMutex(addDownKeysMutex);
+		std::cout << "unlocking Mutex in downKeysPushBack" << std::endl;
 	}
 }
 
 void InputManager::downKeysErase()
 {
-	if (eraseDownKeysMutex != 0)
+	if (addDownKeysMutex != 0)
 	{
-		SDL_LockMutex(eraseDownKeysMutex);
+		std::cout << "locking Mutex in downKeysErase" << std::endl;
+		SDL_LockMutex(addDownKeysMutex);
 		downKeys.erase(--downKeys.end());
-		SDL_UnlockMutex(eraseDownKeysMutex);
+		SDL_UnlockMutex(addDownKeysMutex);
+		std::cout << "unlocking Mutex in downKeysErase" << std::endl;
 	}
 }
 
 void InputManager::heldKeysPushBack(SDL_Keycode k)
 {
-	if (heldKeysPushBackMutex != 0)
+	if (addDownKeysMutex != 0)
 	{
-		SDL_LockMutex(heldKeysPushBackMutex);
+		std::cout << "locking Mutex in heldKeysPushBack" << std::endl;
+		SDL_LockMutex(addDownKeysMutex);
 		heldKeys.push_back(k);
-		SDL_UnlockMutex(heldKeysPushBackMutex);
+		SDL_UnlockMutex(addDownKeysMutex);
+		std::cout << "unlocking Mutex in heldKeysPushBack" << std::endl;
 	}
 }
 
 void InputManager::heldKeysErase(SDL_Keycode k)
 {
-	if (heldKeysEraseMutex != 0)
+	if (addDownKeysMutex != 0)
 	{
-		SDL_LockMutex(heldKeysEraseMutex);
+		std::cout << "locking Mutex in heldKeysErase" << std::endl;
+		SDL_LockMutex(addDownKeysMutex);
 		heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), k));
-		SDL_UnlockMutex(heldKeysEraseMutex);
+		SDL_UnlockMutex(addDownKeysMutex);
+		std::cout << "unlocking Mutex in heldKeysErase" << std::endl;
 	}
 }
 

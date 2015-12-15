@@ -9,8 +9,9 @@ int updateKeyboardStateOnThread(void* threadData)
 {
 	while (updateKeyboardStateOnThread)
 	{
-		//LevelManager::GetInstance()->MovePlayer1(threadData);
+		//std::cout << "my thread moving into critical section" << std::endl;
 		InputManager::GetInstance()->UpdateKeyboardState();
+		//std::cout << "my thread exiting critical section" << std::endl;
 	}
 	return 0;
 }
@@ -106,7 +107,10 @@ int main(int argc, char *argv[])
 		while (SDL_PollEvent(&e) != 0)
 		{
 			//SDL_Thread* updatePolledEventsThread = SDL_CreateThread(updatePolledEventsOnThread, "update polled event thread", &e);
+
+			//std::cout << "main thread moving into critical section" << std::endl;
 			InputManager::GetInstance()->UpdatePolledEvents(e);
+			//std::cout << "main thread exiting critical section" << std::endl;
 
 			//User requests quit
 			if (e.type == SDL_QUIT) //user presses close button on window
