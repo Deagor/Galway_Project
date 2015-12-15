@@ -2,18 +2,8 @@
 #include "Enemy.h"
 #include "LevelManager.h"
 
-
-
-int UpdateEnemyTargets(void *data)
-{
-	while (true) {
-		static_cast<Enemy*>(data)->SetPlayerTarget(b2Vec2(1, 1), b2Vec2(1, 1));
-	}
-
-	return 0;
-}
 LevelManager::LevelManager(b2World* world)
-{
+{ 
 	theWorld = world;
 
 	//**Level 1**
@@ -32,12 +22,12 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform9 = new Platform(theWorld, 40, 190, 150, 20, "Platform");
 	Platform* platform9nd3Q = new Platform(theWorld, 520, 190, 150, 20, "Platform");
 	Platform* platform10 = new Platform(theWorld, 1090, 190, 150, 20, "Platform");
-	Platform* platform11 = new Platform(theWorld, 560, 400, 100, 20,"Platform");
+	Platform* platform11 = new Platform(theWorld, 560, 400, 100, 20, "Platform");
 
 
 	//**Level 2**
-	Platform* platform12 = new Platform(theWorld, 40, 580- 720, 150, 20, "Platform");
-	Platform* platform13 = new Platform(theWorld, 1090, 580- 720, 150, 20, "Platform");
+	Platform* platform12 = new Platform(theWorld, 40, 580 - 720, 150, 20, "Platform");
+	Platform* platform13 = new Platform(theWorld, 1090, 580 - 720, 150, 20, "Platform");
 	Platform* platform14 = new Platform(theWorld, 300, 500 - 720, 200, 20, "Platform");
 	Platform* platform15 = new Platform(theWorld, 750, 500 - 720, 200, 20, "Platform");
 
@@ -48,10 +38,10 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform18 = new Platform(theWorld, 1090, 200 - 720, 150, 20, "Platform");
 	Platform* platform19 = new Platform(theWorld, 300, 300 - 720, 200, 20, "Platform");
 	Platform* platform20 = new Platform(theWorld, 750, 300 - 720, 200, 20, "Platform");
-	Platform* platform21= new Platform(theWorld, 515, 140 - 720, 245, 20, "Platform");
+	Platform* platform21 = new Platform(theWorld, 515, 140 - 720, 245, 20, "Platform");
 
 	//**Level 3**
-	Platform* platform22 = new Platform(theWorld, 520, 580-1440, 80, 20, "Platform");
+	Platform* platform22 = new Platform(theWorld, 520, 580 - 1440, 80, 20, "Platform");
 	Platform* platform23 = new Platform(theWorld, 300, 500 - 1440, 150, 20, "Platform");
 	Platform* platform24 = new Platform(theWorld, 700, 500 - 1440, 150, 20, "Platform");
 	Platform* platform25 = new Platform(theWorld, 150, 400 - 1440, 100, 20, "Platform");
@@ -62,7 +52,7 @@ LevelManager::LevelManager(b2World* world)
 	Platform* platform29 = new Platform(theWorld, 750, 240 - 1440, 80, 20, "Platform");
 	Platform* platform30 = new Platform(theWorld, 950, 180 - 1440, 150, 20, "Platform");
 
-	Platform* platform31= new Platform(theWorld, 240, 240 - 1440, 245, 20, "Platform");
+	Platform* platform31 = new Platform(theWorld, 240, 240 - 1440, 245, 20, "Platform");
 	Platform* platform32 = new Platform(theWorld, 100, 180 - 1440, 100, 20, "Platform");
 
 	platforms.push_back(platform);
@@ -111,9 +101,9 @@ LevelManager::LevelManager(b2World* world)
 
 	player1 = new Player(theWorld, 100, 100, true);
 	player2 = new Player(theWorld, 300, 100, false);
-	enemy = new Enemy(theWorld, 500, 100);
+	players = std::pair<Player*, Player*>(player1, player2);
 
-	enemyTargetThread = SDL_CreateThread(UpdateEnemyTargets, "LazyThread", (void*)enemy);
+	eManager = new EnemyManager(world, 500, 100, &enemies, player1, player2);  
 }
 
 void LevelManager::Update()
@@ -124,13 +114,23 @@ void LevelManager::Update()
 	player2->Update(theWorld);
 	player2->MovePlayer();
 
-	enemy->Update();
+	int size = enemies.size();
 
-	int size = platforms.size();
+	for (int i = 0; i < size; i++) {
+		enemies[i]->Update();
+	}
+
+	size = platforms.size();
 
 	for (int i = 0; i < size; i++) {
 		platforms[i]->Update();
 	}
+
+	if (timer > 45) {
+		eManager->CreateEnemy();
+		timer = 0;
+	}
+	timer++;
 }
 
 void LevelManager::ChangeLevel() {

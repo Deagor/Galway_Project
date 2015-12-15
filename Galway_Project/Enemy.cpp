@@ -8,6 +8,27 @@ enum _entityCategory {
 	ENEMY = 0x00012
 };
 
+int UpdateEnemyTargets(void *data)
+{
+	while (static_cast<Enemy*>(data)->Alive()) {
+		if (SDL_LockMutex (targettingMutex) != 0)
+		{
+			std::cout << "Spinning" << std::endl;
+		}
+		else {
+			std::cout << "Locked, Critical Section Entered for thread: " << std::endl << (int)SDL_ThreadID() << std::endl;
+			static_cast<Enemy*>(data)->SetPlayerTarget();
+
+			if (SDL_UnlockMutex(targettingMutex) != 0)
+			{
+				std::cout << "Failed Spinning" << std::endl;
+			}
+			std::cout << "Unlocked" << std::endl;
+			SDL_Delay(100);
+		}
+	}
+	return 0;
+}
 
 Enemy::Enemy(b2World * world, float x, float y) : m_world(world)
 {
@@ -69,13 +90,13 @@ void Enemy::Movement()
 	case (Directions::NOTMOVING) :
 		//Do NOTHING
 		break;
-	case (Directions::LEFT) :
+	case (Directions::RIGHT) :
 		if (grounded) {
 			if (body->GetLinearVelocity().x < 5)
 				body->ApplyForce(b2Vec2(10, body->GetPosition().y), body->GetLocalCenter(), true);
 		}
 							break;
-	case (Directions::RIGHT) :
+	case (Directions::LEFT) :
 		if (grounded) {
 			if (body->GetLinearVelocity().x > -5)
 				body->ApplyForce(b2Vec2(-10, body->GetPosition().y), body->GetLocalCenter(), true);
@@ -84,9 +105,21 @@ void Enemy::Movement()
 	}
 }
 
-void Enemy::SetPlayerTarget(b2Vec2 p1, b2Vec2 p2)
+void Enemy::SetPlayerTarget()
 {
-	std::cout << "Method Called" << std::endl;
+	b2Vec2 enemyPos = b2Vec2(spriteRect->x, spriteRect->y);
+	if (Distance(player1->GetPosition(), enemyPos) < Distance(player2->GetPosition(), enemyPos)) {
+		if (player1->GetPosition().x > enemyPos.x)
+			direction = Directions::RIGHT;
+		else
+			direction = Directions::LEFT;
+	}
+	else {
+		if (player2->GetPosition().x > enemyPos.x)
+			direction = Directions::RIGHT;
+		else
+			direction = Directions::LEFT;
+	}
 }
 
 void Enemy::Ground(bool ground)
@@ -94,8 +127,26 @@ void Enemy::Ground(bool ground)
 	grounded = ground;
 }
 
-void Enemy::Destroy() { 
+void Enemy::CreateThread(Player * p1, Player * p2)
+{
+	player1 = p1;
+	player2 = p2;
+
+	targettingThread = SDL_CreateThread(UpdateEnemyTargets, "Targetting Thread", (void*)this);
+}
+
+void Enemy::Destroy() {
 	BodyDestroyer::GetInstance()->AddBody(body);
 	spriteRect->x = -10000000;
 	alive = false;
+}
+
+float Enemy::Distance(b2Vec2 player, b2Vec2 enemy)
+{
+	return sqrt(pow((enemy.x - player.x), 2) + pow((enemy.y - player.y), 2));
+}
+
+bool Enemy::Alive()
+{
+	return alive;
 }

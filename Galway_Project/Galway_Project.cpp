@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		float avgFPS = countedFrames / ( fpsTimer.getTicks() / 1000.f ); 
 		if( avgFPS > 2000000 ) { avgFPS = 0; }
 
-		std::cout << "FPS is: " << avgFPS << std::endl;
+		//std::cout << "FPS is: " << avgFPS << std::endl;
 
 		Render::GetInstance()->Update();
 		

@@ -26,6 +26,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "EnemyManager.h"
 #include "Platform.h"
 #include "Bullet.h"
 #include "AudioManager.h"

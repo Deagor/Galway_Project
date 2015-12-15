@@ -36,7 +36,12 @@ private:
 	bool alive = true;
 
 	Directions direction;
-	b2Vec2 playerLocation;
+	b2Vec2 playerLocation; 
+
+	Player* player1;
+	Player* player2;
+
+	SDL_Thread* targettingThread;
 
 public:
 	Enemy(b2World*, float, float);
@@ -55,10 +60,17 @@ public:
 
 	void Movement();
 
-	void SetPlayerTarget(b2Vec2, b2Vec2);
+	void SetPlayerTarget();
 
 	void Ground(bool);
+
+	void CreateThread(Player*, Player*);
+
 	void Destroy();
+
+	float Distance(b2Vec2, b2Vec2);
+
+	bool Alive();
 };
 
 #endif

@@ -2,3 +2,4 @@
 #include "stdafx.h"
 
 //variables being used by threads globally
+extern SDL_mutex* targettingMutex;
