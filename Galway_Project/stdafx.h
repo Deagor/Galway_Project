@@ -18,7 +18,7 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
-
+#include <SDL_thread.h>
 #include <SDL_mixer.h>
 
 #include "InputManager.h"
