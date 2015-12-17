@@ -19,10 +19,22 @@ void CreateGround(b2World& World, float X, float Y)
 	Body->CreateFixture(&FixtureDef); // Apply the fixture definition
 }
 
+bool updateInputThread(void* threadData)
+{
+    while (usingThreadsForInput)
+    {
+        InputManager::GetInstance()->UpdateKeyboardState();
+    }
+    return true;
+}
+
 int main(int argc, char *argv[])
 {
 	b2Vec2 Gravity(0.f, 9.8f);
 	b2World world(Gravity);
+
+    SDL_Thread* InputThread = SDL_CreateThread(updateInputThread, "Checking Input", (void*)d);
+    bool usingThreadsForInput = true;
 
 	LevelManager lvlMngr(&world);
 
@@ -38,6 +50,7 @@ int main(int argc, char *argv[])
 	AudioManager::GetInstance()->Init();
 	AudioManager::GetInstance()->LoadMedia();
 
+    
 	while (!quit)
 	{
 		// Update loop
@@ -77,7 +90,10 @@ int main(int argc, char *argv[])
 				{
 				case SDLK_ESCAPE:
 					quit = true;
+                    usingThreadsForInput = false;
 					break;
+                case SDLK_T:
+                    usingThreadsForInput = !usingThreadsForInput;
 				default:
 					break;
 				}
@@ -86,8 +102,9 @@ int main(int argc, char *argv[])
 			}
 		}//End Poll Events
 
-		InputManager::GetInstance()->UpdateKeyboardState();
+		//InputManager::GetInstance()->UpdateKeyboardState();
 	}//End Game loop
+    SDL_WaitThread(InputThread, NULL);
 	SDL_Quit();
     return 0;
 } //End Main
