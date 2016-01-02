@@ -2,6 +2,17 @@
 //
 
 #include "stdafx.h"
+#include <atomic>
+using std::atomic_int;
+
+Player* player1, *player2;
+
+atomic_int numActiveReaders = 0;//the number of active readers
+
+static atomic_int rw = 1;//semaphore lock for access to the imaginary data
+int mutexR = 1;//lock for reader access to numActiveReaders
+
+atomic_int dataToManipulate = 0;
 
 //fps counter: http://lazyfoo.net/tutorials/SDL/24_calculating_frame_rate/index.php
 
@@ -10,21 +21,39 @@ int updateKeyboardStateOnThread(void* threadData)
 	while (updateKeyboardStateOnThread)
 	{
 		//std::cout << "my thread moving into critical section" << std::endl;
+		rw -= 1;
+		//std::cout << "Writing data." << std::endl;
 		InputManager::GetInstance()->UpdateKeyboardState();
+		rw += 1;
 		//std::cout << "my thread exiting critical section" << std::endl;
 	}
 	return 0;
 }
 
-//int updatePolledEventsOnThread(SDL_Event* threadData)
-//{
-//	while (true)
-//	{
-//		//LevelManager::GetInstance()->MovePlayer2(threadData);
-//		//InputManager::GetInstance()->UpdatePolledEvents(*threadData);
-//	}
-//	return 0;
-//}
+void ReaderProcess()
+{
+	mutexR -= 1;
+	numActiveReaders += 1;
+
+	if (numActiveReaders == 1)
+		rw -= 1;
+
+	mutexR += 1;
+
+	//read data
+	//std::cout << "Reading data." << std::endl;
+	player1->MovePlayer();
+	player2->MovePlayer();
+
+	mutexR -= 1;
+
+	numActiveReaders -= 1;
+
+	if (numActiveReaders == 0)
+		rw += 1;
+
+	mutexR += 1;
+}
 
 void CreateGround(b2World& World, float X, float Y)
 {
@@ -54,6 +83,11 @@ int main(int argc, char *argv[])
 
 	ContactListener contact = ContactListener(LevelManager::GetInstance());
 	world.SetContactListener(&contact);
+
+	
+
+	player1 = new Player(&world, 100, 100, true);
+	player2 = new Player(&world, 300, 100, false);
 
 	Uint32 lastFrameTime = 0;
 	Uint32 frameDelay = 0;
@@ -90,6 +124,12 @@ int main(int argc, char *argv[])
 		world.Step(timeStep, velocityIterations, positionIterations);
 
 		LevelManager::GetInstance()->Update();
+
+		player1->Update(&world);
+		player2->Update(&world);
+
+		ReaderProcess();
+
 		Uint32 time = 0;
 		time = SDL_GetTicks() - startTicks;
 
@@ -103,14 +143,12 @@ int main(int argc, char *argv[])
 		//output the average fps
 		std::cout << "Average FPS: " << avgFPS << std::endl;
 
+		
+
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
-			//SDL_Thread* updatePolledEventsThread = SDL_CreateThread(updatePolledEventsOnThread, "update polled event thread", &e);
-
-			//std::cout << "main thread moving into critical section" << std::endl;
 			InputManager::GetInstance()->UpdatePolledEvents(e);
-			//std::cout << "main thread exiting critical section" << std::endl;
 
 			//User requests quit
 			if (e.type == SDL_QUIT) //user presses close button on window
@@ -134,14 +172,12 @@ int main(int argc, char *argv[])
 
 			}
 		}//End Poll Events
-		//SDL_WaitThread(updatePolledEventsThread, NULL);
 		//InputManager::GetInstance()->UpdateKeyboardState();
 
 		++countedFrames;
 	}//End Game loop
 
 	SDL_WaitThread(updateKeyboardThread, NULL);
-	//SDL_WaitThread(player2MoveThread, NULL);
 
 	SDL_Quit();
     return 0;

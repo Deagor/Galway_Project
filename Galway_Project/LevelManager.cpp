@@ -115,18 +115,18 @@ void LevelManager::SetUpLevels(b2World* world)
 	boundries.push_back(boundry3);
 	boundries.push_back(boundryGround);
 
-	player1 = new Player(theWorld, 100, 100, true);
-	player2 = new Player(theWorld, 300, 100, false);
+	//player1 = new Player(theWorld, 100, 100, true);
+	//player2 = new Player(theWorld, 300, 100, false);
 
 }
 
 void LevelManager::Update()
 {
-	player1->Update(theWorld);
-	player1->MovePlayer();
+	//player1->Update(theWorld);
+	//player1->MovePlayer();
 
-	player2->Update(theWorld);
-	player2->MovePlayer();
+	//player2->Update(theWorld);
+	//player2->MovePlayer();
 
 	int size = platforms.size();
 
@@ -135,19 +135,19 @@ void LevelManager::Update()
 	}
 }
 
-int LevelManager::MovePlayer1(void* data)
-{
-	player1->MovePlayer();
-	std::cout << "MovePlayer1" << std::endl;
-	return 0;
-}
-
-int LevelManager::MovePlayer2(void* data)
-{
-	player2->MovePlayer();
-	std::cout << "MovePlayer2" << std::endl;
-	return 0;
-}
+//int LevelManager::MovePlayer1(void* data)
+//{
+//	player1->MovePlayer();
+//	std::cout << "MovePlayer1" << std::endl;
+//	return 0;
+//}
+//
+//int LevelManager::MovePlayer2(void* data)
+//{
+//	player2->MovePlayer();
+//	std::cout << "MovePlayer2" << std::endl;
+//	return 0;
+//}
 
 void LevelManager::ChangeLevel() {
 	int size = platforms.size();
