@@ -10,7 +10,7 @@ Player* player1, *player2;
 atomic_int numActiveReaders = 0;//the number of active readers
 
 static atomic_int rw = 1;//semaphore lock for access to the imaginary data
-int mutexR = 1;//lock for reader access to numActiveReaders
+atomic_int mutexR = 1;//lock for reader access to numActiveReaders
 
 atomic_int dataToManipulate = 0;
 
@@ -20,39 +20,47 @@ int updateKeyboardStateOnThread(void* threadData)
 {
 	while (updateKeyboardStateOnThread)
 	{
-		//std::cout << "my thread moving into critical section" << std::endl;
-		rw -= 1;
-		//std::cout << "Writing data." << std::endl;
-		InputManager::GetInstance()->UpdateKeyboardState();
-		rw += 1;
-		//std::cout << "my thread exiting critical section" << std::endl;
+		if (rw == 1)
+		{
+			//std::cout << "my thread moving into critical section" << std::endl;
+			rw -= 1;
+			//std::cout << "Writing data." << std::endl;
+			InputManager::GetInstance()->UpdateKeyboardState();
+			rw += 1;
+			//std::cout << "my thread exiting critical section" << std::endl;
+		}
+		//else std::cout << "Writer waiting" << std::endl;
 	}
 	return 0;
 }
 
 void ReaderProcess()
 {
-	mutexR -= 1;
-	numActiveReaders += 1;
+	if (rw == 1)
+	{
+		mutexR -= 1;
+		numActiveReaders += 1;
 
-	if (numActiveReaders == 1)
-		rw -= 1;
+		if (numActiveReaders == 1)
+			rw -= 1;
 
-	mutexR += 1;
+		mutexR += 1;
 
-	//read data
-	//std::cout << "Reading data." << std::endl;
-	player1->MovePlayer();
-	player2->MovePlayer();
+		//read data
+		//std::cout << "Reading data." << std::endl;
+		player1->MovePlayer();
+		player2->MovePlayer();
 
-	mutexR -= 1;
+		mutexR -= 1;
 
-	numActiveReaders -= 1;
+		numActiveReaders -= 1;
 
-	if (numActiveReaders == 0)
-		rw += 1;
+		if (numActiveReaders == 0)
+			rw += 1;
 
-	mutexR += 1;
+		mutexR += 1;
+	}
+	//else std::cout << "Reader waiting" << std::endl;
 }
 
 void CreateGround(b2World& World, float X, float Y)
