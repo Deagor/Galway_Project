@@ -18,10 +18,15 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <thread>
+#include <atomic>
+#include <chrono>
+#include <mutex>
+using std::atomic_int;
 
 #include <SDL_mixer.h>
 #include <SDL_thread.h>
-
+#include "Semaphore.h"
 #include "InputManager.h"
 #include "Render.h"
 #include "Player.h"

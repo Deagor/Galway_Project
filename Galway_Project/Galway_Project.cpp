@@ -9,8 +9,9 @@ Player* player1, *player2;
 
 atomic_int numActiveReaders = 0;//the number of active readers
 
-static atomic_int rw = 1;//semaphore lock for access to the imaginary data
-atomic_int mutexR = 1;//lock for reader access to numActiveReaders
+Semaphore* readWriteSem = new Semaphore();//semaphore lock for access to the data
+
+SDL_mutex* readMutex = SDL_CreateMutex();//lock for reader access to numActiveReaders
 
 atomic_int dataToManipulate = 0;
 
@@ -20,13 +21,13 @@ int updateKeyboardStateOnThread(void* threadData)
 {
 	while (updateKeyboardStateOnThread)
 	{
-		if (rw == 1)
+		if (readWriteSem->GetCurrentValue() == 1)
 		{
 			//std::cout << "my thread moving into critical section" << std::endl;
-			rw -= 1;
+			readWriteSem->P();
 			//std::cout << "Writing data." << std::endl;
 			InputManager::GetInstance()->UpdateKeyboardState();
-			rw += 1;
+			readWriteSem->V();
 			//std::cout << "my thread exiting critical section" << std::endl;
 		}
 		//else std::cout << "Writer waiting" << std::endl;
@@ -36,29 +37,29 @@ int updateKeyboardStateOnThread(void* threadData)
 
 void ReaderProcess()
 {
-	if (rw == 1)
+	if (readWriteSem->GetCurrentValue() == 1)
 	{
-		mutexR -= 1;
+		SDL_LockMutex(readMutex);
 		numActiveReaders += 1;
 
 		if (numActiveReaders == 1)
-			rw -= 1;
+			readWriteSem->P();
 
-		mutexR += 1;
+		SDL_UnlockMutex(readMutex);
 
 		//read data
 		//std::cout << "Reading data." << std::endl;
 		player1->MovePlayer();
 		player2->MovePlayer();
 
-		mutexR -= 1;
+		SDL_LockMutex(readMutex);
 
 		numActiveReaders -= 1;
 
 		if (numActiveReaders == 0)
-			rw += 1;
+			readWriteSem->V();
 
-		mutexR += 1;
+		SDL_UnlockMutex(readMutex);
 	}
 	//else std::cout << "Reader waiting" << std::endl;
 }
@@ -91,8 +92,6 @@ int main(int argc, char *argv[])
 
 	ContactListener contact = ContactListener(LevelManager::GetInstance());
 	world.SetContactListener(&contact);
-
-	
 
 	player1 = new Player(&world, 100, 100, true);
 	player2 = new Player(&world, 300, 100, false);
