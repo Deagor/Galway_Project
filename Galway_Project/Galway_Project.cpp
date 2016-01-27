@@ -4,7 +4,7 @@
 #include "stdafx.h" 
 #include "MyThreadPool.h"
 
-#define FRAME_VALUES 10
+#define FRAME_VALUES 1000
 
 // An array to store frame times:
 Uint32 frametimes[FRAME_VALUES];
@@ -102,7 +102,9 @@ void CreateGround(b2World& World, float X, float Y)
 
 int main(int argc, char *argv[])
 {
-	semGlobal = SDL_CreateSemaphore(4);
+	semGlobal = SDL_CreateSemaphore(2);
+
+	TTF_Init();
 
 	ThreadPool::GetInstance();
 	fpsinit();
@@ -122,16 +124,16 @@ int main(int argc, char *argv[])
 	InputManager::GetInstance();
 
 	AudioManager::GetInstance()->Init();
-	AudioManager::GetInstance()->LoadMedia();
+	AudioManager::GetInstance()->LoadMedia(); 
 
 	while (!quit)
 	{
 		// Update loop
 		// gets the deltaTime between frames, pass 'frameDelay' to updates		
 		fpsthink();
-		printf("%f\n", framespersecond);  
+		//printf("%f\n", framespersecond);  
 
-		Render::GetInstance()->Update();
+		Render::GetInstance()->Update(to_string(framespersecond)); 
 		
 		//move the simulation forward
 		float32 timeStep = 1.0f / 60.0f;

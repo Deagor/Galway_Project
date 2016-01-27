@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Render.h"
 
 static Render* instance = NULL;
 
@@ -12,22 +13,48 @@ Render* Render::GetInstance()
 }
 
 //updating the renderer and drawing what is within it
-void Render::Update() {
+void Render::Update(const std::string &messageText) {
 	//clear the screen
 	SDL_RenderClear(ren);
 
 	//copy the textures to the renderer and give them a destination
 	int numberTextures = textures.size();
 	for (int i = 0; i < numberTextures; i++) {
-		SDL_RenderCopy(ren, textures[i], &srcRects[i], &dstRects[i]);
+		if (dstRects[i].x > -1000)
+			SDL_RenderCopy(ren, textures[i], &srcRects[i], &dstRects[i]);
 	}
+	const char* error;
+	std::string FontLocation = "arial.ttf";
+	TTF_Font *Sans = TTF_OpenFont(FontLocation.c_str(), 10);
+	if (Sans == nullptr) {
+		cout << "No fonts allowed..." << endl;
+		error = TTF_GetError();
+	}
+	else { 
+		SDL_Color White = { 255, 255, 0 };  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 
+		const char* msgText = messageText.c_str();
+
+		SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, msgText, White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+
+		SDL_Texture* Message = SDL_CreateTextureFromSurface(ren, surfaceMessage); //now you can convert it into a texture
+
+		SDL_Rect Message_rect; //create a rect
+		Message_rect.x = 20;  //controls the rect's x coordinate 
+		Message_rect.y = 0; // controls the rect's y coordinte
+		Message_rect.w = 100; // controls the width of the rect
+		Message_rect.h = 30; // controls the height of the rect
+
+		SDL_RenderCopy(ren, Message, NULL, &Message_rect);
+	}
 	//updaet the screen with rendering operations
+	TTF_CloseFont(Sans);
+	Sans = NULL;
 	SDL_RenderPresent(ren);
 }
 
 //adding texture to the renderer with the position
-SDL_Rect* Render::AddSurfaceToRenderer(SDL_Surface *bmp, float x, float y) {
+std::pair<SDL_Rect *, int> Render::AddSurfaceToRenderer(SDL_Surface *bmp, float x, float y) {
 	//getting the width / height from the texture
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(ren, bmp);
 	SDL_FreeSurface(bmp);
@@ -52,7 +79,14 @@ SDL_Rect* Render::AddSurfaceToRenderer(SDL_Surface *bmp, float x, float y) {
 	srcRects.push_back(srcRect);
 	textures.push_back(texture);
 
-	return &dstRects[rectPos];
+	return std::pair<SDL_Rect *, int>(&dstRects[rectPos], rectPos);
+}
+
+void Render::RemoveTexture(int i)
+{
+	dstRects.erase(dstRects.begin() + i);
+	srcRects.erase(srcRects.begin() + i);
+	textures.erase(textures.begin() + i);
 }
 
 SDL_Rect* Render::GetSrcRect(SDL_Rect* rec)
@@ -70,31 +104,9 @@ SDL_Rect* Render::GetSrcRect(SDL_Rect* rec)
 }
 
 //rendering texture
-SDL_Texture* Render::renderText(const std::string &message, const std::string &fontFile,
-	SDL_Color color, int fontSize, SDL_Renderer *renderer)
+void Render::renderText(const std::string &messageText)
 {
-	//Open the font
-	TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
-	if (font == nullptr) {
-		logSDLError("TTF_OpenFont");
-		return nullptr;
-	}
-	//We need to first render to a surface as that's what TTF_RenderText
-	//returns, then load that surface into a texture
-	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
-	if (surf == nullptr) {
-		TTF_CloseFont(font);
-		logSDLError("TTF_RenderText");
-		return nullptr;
-	}
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
-	if (texture == nullptr) {
-		logSDLError("CreateTexture");
-	}
-	//Clean up the surface and font
-	SDL_FreeSurface(surf);
-	TTF_CloseFont(font);
-	return texture;
+
 }
 
 void Render::fill_circle(SDL_Surface *surface, int cx, int cy, int radius, Uint32 pixel)
@@ -149,11 +161,12 @@ int Render::QuitWithError(const std::string &msg) {
 
 Render::Render() {
 	win = SDL_CreateWindow("Group A", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
-	dstRects.reserve(100);
-	srcRects.reserve(100);
+	
+	dstRects.reserve(10000);
+	srcRects.reserve(10000);
+	textures.reserve(10000);
 	//creating a renderer that is linked to the render class 
-	ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 	if (ren == nullptr) {
 		SDL_DestroyWindow(win);
 		QuitWithError("SDL_CreateRenderer Error: ");

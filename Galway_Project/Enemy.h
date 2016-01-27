@@ -40,8 +40,7 @@ private:
 
 	Player* player1;
 	Player* player2;
-
-	SDL_Thread* targettingThread;
+	int removeIndexPos; 
 
 public:
 	Enemy(b2World*, float, float);

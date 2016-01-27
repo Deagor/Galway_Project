@@ -131,8 +131,10 @@ void LevelManager::Update()
 	}
 
 	if (timer > 45) {
-		eManager->CreateEnemy(); 
-		timer = 0;
+		if (enemies.size() < 100) {
+			eManager->CreateEnemy();
+			timer = 0;
+		}
 	}
 	timer++;
 }

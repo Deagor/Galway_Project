@@ -56,7 +56,7 @@ void Platform::LoadAssets(float x, float y, float w, float h)
 	std::string basepath(SDL_GetBasePath());
 	std::string imagePath = basepath + "../Sprites/platform.bmp";
 	sprite = SDL_LoadBMP(imagePath.c_str());
-	rcSprite = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
+	rcSprite = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y).first;
 	yPos = y;
 	rcSprite->w = w;
 	rcSprite->h = h;

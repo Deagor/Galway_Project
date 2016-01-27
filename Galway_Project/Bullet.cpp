@@ -68,7 +68,7 @@ void Bullet::LoadAssets(float x, float y)
 		imagePath = basepath + "../Sprites/player1Bullet.bmp";
 	else imagePath = basepath + "../Sprites/player2Bullet.bmp";
 	sprite = SDL_LoadBMP(imagePath.c_str());
-	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
+	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y).first;
 }
 
 //move the bullet in its current direction

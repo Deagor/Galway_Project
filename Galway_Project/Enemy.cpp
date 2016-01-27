@@ -21,8 +21,7 @@ int UpdateEnemyTargets(void *data)
 		return 0;
 
 	//std::cout << "Locked, Critical Section Entered for thread: " << std::endl << (int)SDL_ThreadID() << std::endl;
-	static_cast<Enemy*>(data)->SetPlayerTarget();
-
+	static_cast<Enemy*>(data)->SetPlayerTarget(); 
 	/*if (SDL_mutexV(targettingMutex) != 0)
 	{
 		std::cout << "Failed Spinning" << std::endl;
@@ -40,7 +39,7 @@ Enemy::Enemy(b2World * world, float x, float y) : m_world(world)
 	createBox2dBody(x, y);
 	LoadAssets(x, y);
 	direction = Directions::NOTMOVING;
-	speed = 0.15f;
+	speed = 0.00015f;
 }
 
 Enemy::~Enemy()
@@ -75,13 +74,15 @@ void Enemy::LoadAssets(float x, float y)
 	std::string imagePath;
 	imagePath = basepath + "../Sprites/enemy.bmp";
 	sprite = SDL_LoadBMP(imagePath.c_str());
-	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
+	std::pair<SDL_Rect *, int> tempPair(Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y));
+	spriteRect = tempPair.first;
+	removeIndexPos = tempPair.second;
 }
 
 void Enemy::Update()
 {
 	if (alive) {
-		SetPlayerTarget();
+		//SetPlayerTarget();
 
 		spriteRect->x = body->GetPosition().x * 30 - 8;
 		spriteRect->y = body->GetPosition().y * 30 - 8;
@@ -113,6 +114,13 @@ void Enemy::Movement()
 
 void Enemy::SetPlayerTarget()
 {
+	/*int size = 1000;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			int poop = 0;
+		}
+	}*/
+
 	b2Vec2 enemyPos = b2Vec2(spriteRect->x, spriteRect->y);
 	if (Distance(player1->GetPosition(), enemyPos) < Distance(player2->GetPosition(), enemyPos)) {
 		if (player1->GetPosition().x > enemyPos.x)
@@ -141,8 +149,7 @@ void Enemy::CreateThread(Player * p1, Player * p2)
 	Parameter p;
 	p.param = (void*)this;
 
-	//ThreadPool::GetInstance()->AddTask(UpdateEnemyTargets, p);
-	//targettingThread = SDL_CreateThread(UpdateEnemyTargets, "Targetting Thread", (void*)this);
+	ThreadPool::GetInstance()->AddTask(UpdateEnemyTargets, p); 
 }
 
 void Enemy::Destroy() {

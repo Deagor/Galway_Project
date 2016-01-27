@@ -55,7 +55,7 @@ void Player::LoadAssets(float x, float y) {
 	std::string basepath(SDL_GetBasePath());
 	std::string imagePath = basepath + "../Sprites/player.bmp";
 	sprite = SDL_LoadBMP(imagePath.c_str());
-	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y);
+	spriteRect = Render::GetInstance()->AddSurfaceToRenderer(sprite, x, y).first;
 }
 
 void Player::MovePlayer() {

@@ -115,7 +115,7 @@ ThreadPool::ThreadPool(unsigned int threadCount) :
 {
 	if (!threadCount)
 		threadCount = thread::hardware_concurrency();
-	workers = std::vector<Worker>(std::max(1u, threadCount));
+	workers = std::vector<Worker>(4);
 }
 
 ThreadPool::~ThreadPool()

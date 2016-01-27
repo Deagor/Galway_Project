@@ -1,13 +1,13 @@
 #pragma once
 #ifndef Render_H
 #define Render_H
-
+#include "stdafx.h"
 class Render {
 
 private:
 	SDL_Renderer *ren;
-	SDL_Window* win;
-
+	SDL_Window* win; 
+	void* font;
 	std::vector<SDL_Texture*> textures;
 	std::vector<SDL_Rect> dstRects;
 	std::vector<SDL_Rect> srcRects;
@@ -20,16 +20,17 @@ private:
 
 public:
 
-
 	static Render * GetInstance();
 
-	void Update();
+	void Update(const std::string &messageText);
 
-	SDL_Rect * AddSurfaceToRenderer(SDL_Surface * bmp, float x, float y);
+	std::pair<SDL_Rect *, int> AddSurfaceToRenderer(SDL_Surface * bmp, float x, float y);
+
+	void RemoveTexture(int);
 
 	SDL_Rect * GetSrcRect(SDL_Rect * rec);
 
-	SDL_Texture * renderText(const std::string & message, const std::string & fontFile, SDL_Color color, int fontSize, SDL_Renderer * renderer);
+	void renderText(const std::string & messageText);
 
 	void fill_circle(SDL_Surface * surface, int cx, int cy, int radius, Uint32 pixel);
 
