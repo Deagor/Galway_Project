@@ -14,6 +14,13 @@ using std::tuple;
 using std::make_tuple;
 using std::get;
 
+struct keyActions {
+	bool left = false;
+	bool right = false;
+	bool jump = false;
+	bool shoot = false; 
+};
+
 class Player {
 public:
 	Player() {};
@@ -32,6 +39,7 @@ public:
 	bool isPlayer1();
 	void SetGrounded(bool set);
 private:
+	keyActions actions;
 	bool reset;
 	b2Vec2 resetPos;
 	//move this to move your sprite (To bodydef position)

@@ -1,6 +1,6 @@
 #pragma once
 #ifndef ENEMY_H
-#define ENEMY_H
+#define ENEMY_H 
 
 enum Directions
 {
@@ -70,7 +70,7 @@ public:
 
 	float Distance(b2Vec2, b2Vec2);
 
-	bool Alive();
+	bool Alive(); 
 };
 
 #endif

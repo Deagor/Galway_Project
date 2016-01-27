@@ -12,7 +12,7 @@ enum _entityCategory {
 Player::Player(b2World* world, float x, float y, bool isPlayer1) : m_world(world) {
 	reset = false;
 	grounded = false;
-	direction = 1; 
+	direction = 1;
 	player1 = isPlayer1;
 	speed = 0.2;
 	resetPos = b2Vec2(10, 350);
@@ -90,7 +90,7 @@ void Player::MovePlayer() {
 		}
 
 		if (InputManager::GetInstance()->IsKeyHeld(SDLK_SPACE) && hasBullet)
-		{ 
+		{
 			Shoot();
 			AudioManager::GetInstance()->PlaySoundEffect(1);
 		}
@@ -146,7 +146,7 @@ void Player::Update(b2World* world) {
 	spriteRect->y = body->GetPosition().y * 30 - 16;
 }
 
-void Player::Shoot() { 
+void Player::Shoot() {
 	if (hasBullet) {
 		if (direction == 0)
 		{

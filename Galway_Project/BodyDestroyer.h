@@ -1,6 +1,6 @@
 #pragma once
 #ifndef BODYDESTROYER
-#define BODYDESTROYER
+#define BODYDESTROYER 
 
 class BodyDestroyer {
 private:

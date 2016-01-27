@@ -19,12 +19,16 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <chrono>
+#include <thread>        
+#include <queue> 
+#include <functional>
 
 #include <SDL_mixer.h>
 
 #include "InputManager.h"
 #include "Render.h"
-#include "Player.h"
+#include "Player.h" 
 #include "Enemy.h"
 #include "EnemyManager.h"
 #include "Platform.h"
@@ -32,7 +36,7 @@
 #include "AudioManager.h"
 #include "ContactListener.h"
 #include "LevelManager.h"
-#include "BodyDestroyer.h"
+#include "BodyDestroyer.h" 
 
 #include "ThreadingGlobals.h"
 
@@ -41,4 +45,5 @@
 
 #include "LTimer.h"
 
+using namespace std;
 // TODO: reference additional headers your program requires here

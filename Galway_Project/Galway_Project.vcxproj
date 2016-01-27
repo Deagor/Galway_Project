@@ -157,6 +157,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LTimer.h" />
+    <ClInclude Include="MyThreadPool.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="LTimer.cpp" />
+    <ClCompile Include="MyThreadPool.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />

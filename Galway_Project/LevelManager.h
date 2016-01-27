@@ -8,7 +8,7 @@ private:
 	std::pair <Player*, Player*> players;
 
 	Player* player1,* player2;
-	EnemyManager* eManager;
+	EnemyManager* eManager; 
 	b2World* theWorld;
 	SDL_Thread* enemyTargetThread;
 

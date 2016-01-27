@@ -43,23 +43,19 @@ void InputManager::UpdatePolledEvents(SDL_Event e)
 	if (!IsKeyHeld(e.key.keysym.sym))
 	{
 		if (e.type == SDL_KEYDOWN)
-		{
-			std::cout << "Key Pressed\n";
+		{ 
 			downKeys.push_back(e.key.keysym.sym);
 		}
 	}
 
 	//If a key was released
 	if (e.type == SDL_KEYUP)
-	{
-		std::cout << "Key Released\n";
+	{ 
 		heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), e.key.keysym.sym));
 	}
 
 	if (e.type == SDL_MOUSEBUTTONDOWN)
-	{
-		std::cout << "Mouse Clicked\n";
-
+	{ 
 	}
 }
 
@@ -88,7 +84,7 @@ bool InputManager::IsKeyHeld(SDL_Keycode key)
 bool InputManager::IsKeyUp(SDL_Keycode key)
 {
 	auto iter = std::find(upKeys.begin(), upKeys.end(), key);
-	
+
 	if (iter != upKeys.end())
 	{
 		return true;

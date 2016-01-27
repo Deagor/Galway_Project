@@ -1,7 +1,8 @@
 // Galway_Project.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+#include "stdafx.h" 
+#include "MyThreadPool.h"
 
 void CreateGround(b2World& World, float X, float Y)
 {
@@ -21,6 +22,10 @@ void CreateGround(b2World& World, float X, float Y)
 
 int main(int argc, char *argv[])
 {
+	semGlobal = SDL_CreateSemaphore(4);
+
+	ThreadPool::GetInstance();
+
 	//fps counter code
 	//Set text color as black 
 	SDL_Color textColor = { 0, 0, 0, 255 }; //The frames per second timer 
@@ -45,6 +50,7 @@ int main(int argc, char *argv[])
 	bool quit = false;
 
 	BodyDestroyer::GetInstance(&world);
+	InputManager::GetInstance();
 
 	AudioManager::GetInstance()->Init();
 	AudioManager::GetInstance()->LoadMedia();
@@ -76,7 +82,6 @@ int main(int argc, char *argv[])
 		lvlMngr.Update(); 
 
 		BodyDestroyer::GetInstance()->DestroyBodies(); 
-
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
@@ -99,6 +104,8 @@ int main(int argc, char *argv[])
 				default:
 					break;
 				}
+
+
 			}
 		}//End Poll Events
 

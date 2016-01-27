@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "MyThreadPool.h"
 
 enum _entityCategory {
 	BOUNDARY = 0x0001,
@@ -10,24 +11,27 @@ enum _entityCategory {
 
 int UpdateEnemyTargets(void *data)
 {
-	while (static_cast<Enemy*>(data)->Alive()) {
-		if (SDL_LockMutex (targettingMutex) != 0)
+	//while (static_cast<Enemy*>(data)->Alive()) {
+		/*if (SDL_mutexP (targettingMutex) != 0)
 		{
 			std::cout << "Spinning" << std::endl;
-		}
-		else {
-			std::cout << "Locked, Critical Section Entered for thread: " << std::endl << (int)SDL_ThreadID() << std::endl;
-			static_cast<Enemy*>(data)->SetPlayerTarget();
+		}*/
+		//else {
+	if (!static_cast<Enemy*>(data)->Alive())
+		return 0;
 
-			if (SDL_UnlockMutex(targettingMutex) != 0)
-			{
-				std::cout << "Failed Spinning" << std::endl;
-			}
-			std::cout << "Unlocked" << std::endl;
-			SDL_Delay(100);
-		}
-	}
-	return 0;
+	//std::cout << "Locked, Critical Section Entered for thread: " << std::endl << (int)SDL_ThreadID() << std::endl;
+	static_cast<Enemy*>(data)->SetPlayerTarget();
+
+	/*if (SDL_mutexV(targettingMutex) != 0)
+	{
+		std::cout << "Failed Spinning" << std::endl;
+	}*/
+
+	//std::cout << "Unlocked" << std::endl;
+	//}
+
+	return 1;
 }
 
 Enemy::Enemy(b2World * world, float x, float y) : m_world(world)
@@ -35,7 +39,7 @@ Enemy::Enemy(b2World * world, float x, float y) : m_world(world)
 	grounded = false;
 	createBox2dBody(x, y);
 	LoadAssets(x, y);
-	direction = Directions::LEFT;
+	direction = Directions::NOTMOVING;
 	speed = 0.15f;
 }
 
@@ -77,6 +81,8 @@ void Enemy::LoadAssets(float x, float y)
 void Enemy::Update()
 {
 	if (alive) {
+		SetPlayerTarget();
+
 		spriteRect->x = body->GetPosition().x * 30 - 8;
 		spriteRect->y = body->GetPosition().y * 30 - 8;
 
@@ -95,13 +101,13 @@ void Enemy::Movement()
 			if (body->GetLinearVelocity().x < 5)
 				body->ApplyForce(b2Vec2(10, body->GetPosition().y), body->GetLocalCenter(), true);
 		}
-							break;
+							 break;
 	case (Directions::LEFT) :
 		if (grounded) {
 			if (body->GetLinearVelocity().x > -5)
 				body->ApplyForce(b2Vec2(-10, body->GetPosition().y), body->GetLocalCenter(), true);
 		}
-							 break;
+							break;
 	}
 }
 
@@ -132,7 +138,11 @@ void Enemy::CreateThread(Player * p1, Player * p2)
 	player1 = p1;
 	player2 = p2;
 
-	targettingThread = SDL_CreateThread(UpdateEnemyTargets, "Targetting Thread", (void*)this);
+	Parameter p;
+	p.param = (void*)this;
+
+	//ThreadPool::GetInstance()->AddTask(UpdateEnemyTargets, p);
+	//targettingThread = SDL_CreateThread(UpdateEnemyTargets, "Targetting Thread", (void*)this);
 }
 
 void Enemy::Destroy() {
@@ -149,4 +159,4 @@ float Enemy::Distance(b2Vec2 player, b2Vec2 enemy)
 bool Enemy::Alive()
 {
 	return alive;
-}
+} 

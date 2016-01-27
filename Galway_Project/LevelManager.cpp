@@ -103,7 +103,7 @@ LevelManager::LevelManager(b2World* world)
 	player2 = new Player(theWorld, 300, 100, false);
 	players = std::pair<Player*, Player*>(player1, player2);
 
-	eManager = new EnemyManager(world, 500, 100, &enemies, player1, player2);  
+	eManager = new EnemyManager(world, 500, 100, &enemies, player1, player2); 
 }
 
 void LevelManager::Update()
@@ -114,10 +114,14 @@ void LevelManager::Update()
 	player2->Update(theWorld);
 	player2->MovePlayer();
 
-	int size = enemies.size();
+	int size;
 
-	for (int i = 0; i < size; i++) {
-		enemies[i]->Update();
+	for (int i = 0; i < enemies.size(); i++) {
+		enemies[i]->Update(); 
+		if (!enemies[i]->Alive()) {
+			enemies.erase(enemies.begin() + i);
+			i--;
+		}
 	}
 
 	size = platforms.size();
@@ -127,7 +131,7 @@ void LevelManager::Update()
 	}
 
 	if (timer > 45) {
-		eManager->CreateEnemy();
+		eManager->CreateEnemy(); 
 		timer = 0;
 	}
 	timer++;
