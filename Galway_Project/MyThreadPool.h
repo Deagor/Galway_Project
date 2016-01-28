@@ -27,7 +27,6 @@ private:
 	SDL_Thread* thd;
 	SDL_mutex* mtx = NULL;
 	bool alive;
-	SDL_sem* sem = NULL;
 };
 
 class ThreadPool {

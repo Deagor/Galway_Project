@@ -102,6 +102,7 @@ void CreateGround(b2World& World, float X, float Y)
 
 int main(int argc, char *argv[])
 {
+	//Semaphore for the project. The number passed to the create represents amount of pieces of code that can run at the same time.
 	semGlobal = SDL_CreateSemaphore(2);
 
 	TTF_Init();
