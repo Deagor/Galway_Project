@@ -55,6 +55,13 @@ void InputManager::UpdateKeyboardState()
 
 void InputManager::UpdatePolledEvents(SDL_Event e)
 {
+    if (e.type == SDL_QUIT) //user presses close button on window
+    {
+        SDL_LockMutex(quitMutex);
+        shouldQuit = true;
+        SDL_UnlockMutex(quitMutex);
+        return; //Quit called for, no need to continue
+    }
 	//if a new key was pressed
     SDL_LockMutex(HeldKeyMutex);
 
@@ -76,18 +83,17 @@ void InputManager::UpdatePolledEvents(SDL_Event e)
 		}
 	}
     
-    
-
 	//If a key was released
 	if (e.type == SDL_KEYUP)
 	{
 		std::cout << "Key Released\n";
-
-        SDL_LockMutex(HeldKeyMutex)
+        
+        SDL_LockMutex(HeldKeyMutex);
 		heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), e.key.keysym.sym));
-        SDL_UnlockMutex(HeldKeyMutex)
+        SDL_UnlockMutex(HeldKeyMutex);
 	}
 
+    
 }
 
 bool InputManager::IsKeyDown(SDL_Keycode key)
@@ -121,4 +127,9 @@ bool InputManager::IsKeyUp(SDL_Keycode key)
 		return true;
 	}
 	return false;
+}
+
+bool InputManager::getShouldQuit()
+{
+    return shouldQuit;
 }

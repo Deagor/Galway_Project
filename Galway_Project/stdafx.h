@@ -9,7 +9,7 @@
 
 #include "SDL.h"
 
-#include "Build\Box2D.h"
+#include "Box2D.h"
 
 #include <stdio.h>
 #include <tchar.h>

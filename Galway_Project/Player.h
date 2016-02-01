@@ -5,7 +5,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <Build\Box2D.h>
+#include <Box2D.h>
 #include "Render.h" 
 #include <tuple>
 #include "Bullet.h"
